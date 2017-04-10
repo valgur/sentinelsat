@@ -6,7 +6,7 @@ import logging
 import re
 import xml.etree.ElementTree as ET
 from collections import OrderedDict
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 from os import remove
 from os.path import exists, getsize, join
 from time import sleep
@@ -17,10 +17,9 @@ import homura
 import html2text
 import pycurl
 import requests
-from tqdm import tqdm
-
 from six import string_types
 from six.moves.urllib.parse import urljoin
+from tqdm import tqdm
 
 from . import __version__ as sentinelsat_version
 
@@ -247,54 +246,110 @@ class SentinelAPI(object):
         values = _parse_odata_response(results)
         return values
 
-    def download(self, id, directory_path='.', checksum=False, check_existing=False, **kwargs):
-        """Download a product using homura.
+    def download(self, ids, directory='.', checksum=False, check_existing=False, max_attempts=10, raise_on='all',
+                 **kwargs):
+        """Download a product or a list of products.
 
-        Uses the filename on the server for the downloaded file, e.g.
+        In case of interruptions or other exceptions, downloading will restart from where it left off.
+        Downloading is attempted at most max_attempts times to avoid getting stuck with unrecoverable errors.
+
+        The downloaded files will have the filename specified by the server, e.g.
         "S1A_EW_GRDH_1SDH_20141003T003840_20141003T003920_002658_002F54_4DD1.zip".
-
-        Incomplete downloads are continued and complete files are skipped.
-
-        Further keyword arguments are passed to the homura.download() function.
 
         Parameters
         ----------
-        id : string
-            UUID of the product, e.g. 'a8dd0cfd-613e-45ce-868c-d79177b916ed'
-        directory_path : string, optional
-            Where the file will be downloaded
+        ids : str or list
+            A sing UUID or a list of UUIDs of the products, e.g. 'a8dd0cfd-613e-45ce-868c-d79177b916ed'.
+        directory : string
+            Directory where the downloaded files will be downloaded. Defaults to the current directory.
         checksum : bool, optional
-            If True, verify the downloaded file's integrity by checking its MD5 checksum.
-            Throws InvalidChecksumError if the checksum does not match.
-            Defaults to False.
+            If True, verify each downloaded file's integrity by checking its MD5 checksum. Defaults to False.
         check_existing : bool, optional
-            If True and a fully downloaded file with the same name exists on the disk,
+            If True and a complete file with the same name exists on the disk,
             verify its integrity using its MD5 checksum. Re-download in case of non-matching checksums.
             Defaults to False.
+        max_attempts : int, optional
+            Number of allowed retries before giving up on downloading a product. Defaults to 10.
+        raise_on : 'any' or 'all' (default)
+            Determines when an exception is raised: either when any of the downloads fail 
+            or when all of them have failed.
+        
+        Other Parameters
+        ----------------
+        Further keyword arguments are passed to the homura.download() function.
 
         Returns
         -------
-        product_info : dict
-            Dictionary containing the product's info from get_product_info() as well as the path on disk.
+        dict[string, dict]
+            A dictionary with an entry for each UUID. Contains the OData information of each product
+            as well as the parameters 'download_successful' (indicating download success/failure) and
+            'path' (the downloaded file's path on disk).
 
         Raises
         ------
         InvalidChecksumError
             If the MD5 checksum does not match the checksum on the server.
         """
-        # Check if API is reachable.
-        product_info = None
-        while product_info is None:
-            try:
-                product_info = self.get_product_odata(id)[id]
-            except SentinelAPIError as e:
-                self.logger.info("Invalid API response:\n{}\nTrying again in 1 minute.".format(str(e)))
-                sleep(60)
+        if len(ids) == 0:
+            return {}
+        if isinstance(ids, string_types):
+            ids = [ids]
+            raise_on = "any"
 
-        path = join(directory_path, product_info['title'] + '.zip')
-        product_info['path'] = path
-        kwargs = _fillin_cainfo(kwargs)
+        self.logger.info("Will download %d products" % len(ids))
 
+        # Get product info for all products
+        product_infos = self._get_download_info(ids, max_attempts, raise_on)
+
+        last_exception = None
+        successful_count = 0
+        for i, (id, product_info) in enumerate(product_infos.items()):
+            product_info['download_successful'] = False
+            product_info['path'] = join(directory, product_info['title'] + '.zip')
+            for _ in range(max_attempts):
+                try:
+                    self._download_inner(id, product_info, checksum, check_existing, **kwargs)
+                    product_info['download_successful'] = True
+                    successful_count += 1
+                    break
+                except (SentinelAPIError, pycurl.error, InvalidChecksumError) as e:
+                    if isinstance(e, pycurl.error) and e.args[0] == 42:
+                        raise KeyboardInterrupt
+                    last_exception = e
+                    self.logger.exception("There was an error downloading %s (id: %s)" % (product_info['title'], id))
+                if raise_on == 'any':
+                    raise last_exception
+                self.logger.info("Retrying...")
+            self.logger.info("{}/{} products downloaded".format(i + 1, len(ids)))
+        if successful_count == 0:
+            raise last_exception
+        return product_infos
+
+    def _get_download_info(self, ids, max_attempts, raise_on):
+        product_infos = OrderedDict()
+        last_exception = None
+        for id in ids:
+            for _ in range(max_attempts):
+                try:
+                    d = self.get_product_odata(id)
+                    product_infos.update(d)
+                    break
+                except SentinelAPIError as e:
+                    last_exception = e
+                    if 'Invalid key' in e.msg:
+                        if raise_on == 'any':
+                            raise
+                        else:
+                            break
+                    self.logger.warning("Invalid OData API response:\n{}\nTrying again in 1 minute.".format(str(e)))
+                    sleep(60)
+        if not product_infos:
+            self.logger.error("Failed to get required information about products from the server.")
+            raise last_exception
+        return product_infos
+
+    def _download_inner(self, id, product_info, checksum=False, check_existing=False, **kwargs):
+        path = product_info['path']
         self.logger.info('Downloading %s to %s' % (id, path))
 
         # Check if the file exists and passes md5 test
@@ -308,12 +363,12 @@ class SentinelAPI(object):
                     '%s was already downloaded but is corrupt: checksums do not match. Re-downloading.' % path)
                 remove(path)
 
-        if (exists(path) and getsize(path) >= 2 ** 31 and
-                    pycurl.version.split()[0].lower() <= 'pycurl/7.43.0'):
+        if exists(path) and getsize(path) >= 2 ** 31 and pycurl.version.split()[0].lower() <= 'pycurl/7.43.0':
             # Workaround for PycURL's bug when continuing > 2 GB files
             # https://github.com/pycurl/pycurl/issues/405
             remove(path)
 
+        kwargs = _fillin_cainfo(kwargs)
         homura.download(product_info['url'], path=path, auth=self.session.auth,
                         user_agent=self.user_agent, **kwargs)
 
@@ -322,55 +377,6 @@ class SentinelAPI(object):
             if not _md5_compare(path, product_info['md5']):
                 remove(path)
                 raise InvalidChecksumError('File corrupt: checksums do not match')
-        return product_info
-
-    def download_all(self, products, directory_path='.', max_attempts=10, checksum=False, check_existing=False,
-                     **kwargs):
-        """Download all products returned in query().
-
-        File names on the server are used for the downloaded files, e.g.
-        "S1A_EW_GRDH_1SDH_20141003T003840_20141003T003920_002658_002F54_4DD1.zip".
-
-        In case of interruptions or other exceptions, downloading will restart from where it left off.
-        Downloading is attempted at most max_attempts times to avoid getting stuck with unrecoverable errors.
-
-        Parameters
-        ----------
-        products : list
-            List of products returned with self.query()
-        directory_path : string
-            Directory where the downloaded files will be downloaded
-        max_attempts : int, optional
-            Number of allowed retries before giving up downloading a product. Defaults to 10.
-
-        Other Parameters
-        ----------------
-        See download().
-
-        Returns
-        -------
-        dict[string, dict]
-            A dictionary containing the return value from download() for each successfully downloaded product.
-        set[string]
-            The list of products that failed to download.
-        """
-        self.logger.info("Will download %d products" % len(products))
-        return_values = OrderedDict()
-        for i, product_id in enumerate(products):
-            for attempt_num in range(max_attempts):
-                try:
-                    product_info = self.download(product_id, directory_path, checksum, check_existing, **kwargs)
-                    return_values[product_id] = product_info
-                    break
-                except (KeyboardInterrupt, SystemExit):
-                    raise
-                except InvalidChecksumError:
-                    self.logger.warning("Invalid checksum. The downloaded file for '{}' is corrupted.".format(product_id))
-                except:
-                    self.logger.exception("There was an error downloading %s" % product_id)
-            self.logger.info("{}/{} products downloaded".format(i + 1, len(products)))
-        failed = set(products) - set(return_values)
-        return return_values, failed
 
     @staticmethod
     def get_products_size(products):

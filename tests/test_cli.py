@@ -285,3 +285,19 @@ def test_download_single(tmpdir):
 
     # clean up
     tmpdir.remove()
+
+
+@my_vcr.use_cassette('test_download_cli')
+@pytest.mark.scihub
+@pytest.mark.homura
+def test_download_error(tmpdir):
+    runner = CliRunner()
+    product_id = 'f30b2a6a-b0c1-49f1-b19e-e10c3cf0xxxx'
+    command = ['download'] + _api_auth + [product_id, '--path', str(tmpdir)]
+    result = runner.invoke(
+        cli,
+        command,
+        catch_exceptions=False
+    )
+    assert 'No product with' in result.output
+    tmpdir.remove()

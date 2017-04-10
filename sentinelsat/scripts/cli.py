@@ -1,8 +1,8 @@
+import logging
+import os
+
 import click
 import geojson as gj
-import logging
-
-import os
 
 from sentinelsat import __version__ as sentinelsat_version
 from sentinelsat.sentinel import SentinelAPI, SentinelAPIError, read_geojson, geojson_to_wkt
@@ -104,12 +104,15 @@ def search(
             outfile.write(gj.dumps(footprints_geojson))
 
     if download is True:
-        product_infos, failed_downloads = api.download_all(products, path, checksum=md5)
+        product_infos = api.download(products, path, md5)
         if md5 is True:
-            if len(failed_downloads) > 0:
+            corrupt_list = ""
+            for id, attrs in product_infos.items():
+                if not attrs['download_successful']:
+                    corrupt_list += "%s : %s\n" % (id, attrs['title'])
+            if corrupt_list:
                 with open(os.path.join(path, "corrupt_scenes.txt"), "w") as outfile:
-                    for failed_id in failed_downloads:
-                        outfile.write("%s : %s\n" % (failed_id, products[failed_id]['title']))
+                    outfile.write(corrupt_list)
     else:
         for product_id, props in products.items():
             logger.info('Product %s - %s' % (product_id, props['summary']))
@@ -142,4 +145,8 @@ def download(user, password, productid, path, md5, url):
     and the id of the product you want to download.
     """
     api = SentinelAPI(user, password, url)
-    api.download(productid, path, md5)
+    try:
+        api.download(productid, path, checksum=md5)
+    except SentinelAPIError as e:
+        if 'Invalid key' in e.msg:
+            logger.error('No product with ID \'%s\' exists on server', productid)
