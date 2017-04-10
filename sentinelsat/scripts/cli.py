@@ -56,11 +56,6 @@ def cli():
         'https://scihub.copernicus.eu/apihub/'.
         """)
 @click.option(
-    '--md5', is_flag=True,
-    help="""Verify the MD5 checksum and write corrupt product ids and filenames
-    to corrupt_scenes.txt.
-    """)
-@click.option(
     '--sentinel1', is_flag=True,
     help='Limit search to Sentinel-1 products.')
 @click.option(
@@ -69,10 +64,19 @@ def cli():
 @click.option(
     '-c', '--cloud', type=int,
     help='Maximum cloud cover in percent. (Automatically sets --sentinel2)')
+@click.option(
+    '--no-md5', is_flag=True,
+    help="""Skip checking of file integrity with a checksum after downloading.""")
+@click.option(
+    '--report-corrupt', is_flag=True,
+    help="""Write corrupt product ids and filenames to corrupt_scenes.txt.""")
+@click.option(
+    '--check-existing', is_flag=True,
+    help="""Also check the integrity of already complete files on disk and 
+        re-download if necessary.""")
 @click.version_option(version=sentinelsat_version, prog_name="sentinelsat")
-def search(
-        user, password, geojson, start, end, download, md5,
-        sentinel1, sentinel2, cloud, footprints, path, query, url):
+def search(user, password, geojson, start, end, download, sentinel1, sentinel2, cloud,
+           footprints, path, query, url, no_md5, report_corrupt, check_existing):
     """Search for Sentinel products and, optionally, download all the results
     and/or create a geojson file with the search result footprints.
     Beyond your SciHub user and password, you must pass a geojson file
@@ -104,8 +108,8 @@ def search(
             outfile.write(gj.dumps(footprints_geojson))
 
     if download is True:
-        product_infos = api.download(products, path, md5)
-        if md5 is True:
+        product_infos = api.download(products, path, checksum=not no_md5, check_existing=check_existing)
+        if report_corrupt is True:
             corrupt_list = ""
             for id, attrs in product_infos.items():
                 if not attrs['download_successful']:
@@ -135,18 +139,20 @@ def search(
         'https://scihub.copernicus.eu/apihub/'.
         """)
 @click.option(
-    '--md5', is_flag=True,
-    help="""Verify the MD5 checksum and write corrupt product ids and filenames
-    to corrupt_scenes.txt.')
-    """)
+    '--no-md5', is_flag=True,
+    help="""Skip checking of file integrity with MD5 checksum after downloading.""")
+@click.option(
+    '--check-existing', is_flag=True,
+    help="""Also check the integrity of already complete files on disk and 
+        re-download if necessary.""")
 @click.version_option(version=sentinelsat_version, prog_name="sentinelsat")
-def download(user, password, productid, path, md5, url):
+def download(user, password, productid, path, url, no_md5, check_existing):
     """Download a Sentinel Product. It just needs your SciHub user and password
     and the id of the product you want to download.
     """
     api = SentinelAPI(user, password, url)
     try:
-        api.download(productid, path, checksum=md5)
+        api.download(productid, path, checksum=not no_md5, check_existing=check_existing)
     except SentinelAPIError as e:
         if 'Invalid key' in e.msg:
             logger.error('No product with ID \'%s\' exists on server', productid)

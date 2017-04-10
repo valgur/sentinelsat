@@ -246,7 +246,7 @@ class SentinelAPI(object):
         values = _parse_odata_response(results)
         return values
 
-    def download(self, ids, directory='.', checksum=False, check_existing=False, max_attempts=10, raise_on='all',
+    def download(self, ids, directory='.', checksum=True, check_existing=False, max_attempts=10, raise_on='all',
                  **kwargs):
         """Download a product or a list of products.
 
@@ -263,7 +263,7 @@ class SentinelAPI(object):
         directory : string
             Directory where the downloaded files will be downloaded. Defaults to the current directory.
         checksum : bool, optional
-            If True, verify each downloaded file's integrity by checking its MD5 checksum. Defaults to False.
+            If True (default), verify each downloaded file's integrity by checking its MD5 checksum.
         check_existing : bool, optional
             If True and a complete file with the same name exists on the disk,
             verify its integrity using its MD5 checksum. Re-download in case of non-matching checksums.

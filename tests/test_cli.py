@@ -183,7 +183,7 @@ def test_download_many(tmpdir):
     # Should not re-download
     result = runner.invoke(
         cli,
-        command + ['--md5'],
+        command,
         catch_exceptions=False
     )
 
@@ -202,10 +202,10 @@ def test_download_many(tmpdir):
     with requests_mock.mock(real_http=True) as rqst:
         rqst.get(url, json=json)
 
-        # md5 flag not set, expect nothing to happen
+        # checksumming disabled, expect nothing to happen
         result = runner.invoke(
             cli,
-            command,
+            command + ['--no-md5'],
             catch_exceptions=False
         )
 
@@ -214,10 +214,10 @@ def test_download_many(tmpdir):
             f.remove()
 
         rqst.get(url, json=json)
-        # md5 flag set, should now show an error
+        # checksumming enabled, should now show an error
         result = runner.invoke(
             cli,
-            command + ['--md5'],
+            command + ['--report-corrupt'],
             catch_exceptions=False
         )
 
@@ -246,7 +246,7 @@ def test_download_single(tmpdir):
     # The file already exists, should not be re-downloaded
     result = runner.invoke(
         cli,
-        command + ['--md5'],
+        command,
         catch_exceptions=False
     )
 
@@ -264,10 +264,10 @@ def test_download_single(tmpdir):
     with requests_mock.mock(real_http=True) as rqst:
         rqst.get(url, json=json)
 
-        # md5 flag not set, expect nothing to happen
+        # checksumming disabled, expect nothing to happen
         result = runner.invoke(
             cli,
-            command,
+            command + ['--no-md5'],
             catch_exceptions=False
         )
 
@@ -275,11 +275,11 @@ def test_download_single(tmpdir):
         for f in tmpdir.listdir():
             f.remove()
 
-        # md5 flag set, should raise an exception
+        # checksumming enabled, should now show an error
         with pytest.raises(InvalidChecksumError) as excinfo:
             result = runner.invoke(
                 cli,
-                command + ['--md5'],
+                command,
                 catch_exceptions=False
             )
 
