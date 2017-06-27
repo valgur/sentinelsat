@@ -112,7 +112,7 @@ def test_SentinelAPI_connection():
 
     assert api._last_query == (
         'beginPosition:[2015-01-01T00:00:00Z TO 2015-01-02T00:00:00Z] '
-        'AND footprint:"Intersects(POLYGON((0 0,1 1,0 1,0 0)))"')
+        'footprint:"Intersects(POLYGON((0 0,1 1,0 1,0 0)))"')
     assert api._last_response.status_code == 200
 
 
@@ -150,12 +150,12 @@ def test_api_query_format():
     last_24h = _format_query_date(now - timedelta(hours=24))
     query = api.format_query(wkt, initial_date=last_24h, end_date=now)
     assert query == 'beginPosition:[%s TO %s] ' % (last_24h, _format_query_date(now)) + \
-                    'AND footprint:"Intersects(POLYGON((0 0,1 1,0 1,0 0)))"'
+                    'footprint:"Intersects(POLYGON((0 0,1 1,0 1,0 0)))"'
 
     query = api.format_query(wkt, end_date=now, producttype='SLC')
     assert query == 'beginPosition:[NOW-1DAY TO %s] ' % (_format_query_date(now)) + \
-                    'AND footprint:"Intersects(POLYGON((0 0,1 1,0 1,0 0)))" ' + \
-                    'AND producttype:SLC'
+                    'footprint:"Intersects(POLYGON((0 0,1 1,0 1,0 0)))" ' + \
+                    'producttype:SLC'
 
     query = api.format_query()
     assert query == 'beginPosition:[NOW-1DAY TO NOW]'
@@ -226,7 +226,7 @@ def test_small_query():
     api.query(**_small_query)
     assert api._last_query == (
         'beginPosition:[2015-01-01T00:00:00Z TO 2015-01-02T00:00:00Z] '
-        'AND footprint:"Intersects(POLYGON((0 0,1 1,0 1,0 0)))"')
+        'footprint:"Intersects(POLYGON((0 0,1 1,0 1,0 0)))"')
     assert api._last_response.status_code == 200
 
 
@@ -237,7 +237,7 @@ def test_large_query():
     full_products = list(api.query(**_large_query))
     assert api._last_query == (
         'beginPosition:[2015-12-01T00:00:00Z TO 2015-12-31T00:00:00Z] '
-        'AND footprint:"Intersects(POLYGON((0 0,0 10,10 10,10 0,0 0)))"')
+        'footprint:"Intersects(POLYGON((0 0,0 10,10 10,10 0,0 0)))"')
     assert api._last_response.status_code == 200
     assert len(full_products) > api.page_size
 
@@ -269,16 +269,16 @@ def test_too_long_query():
     # that a relevant error message is provided
 
     def create_query(n):
-        return api.format_query(None, "NOW", "NOW") + " AND orbitdirection:descending" * n
+        return api.format_query(None, "NOW", "NOW") + " orbitdirection:descending" * n
 
     # Expect no error
-    q = create_query(117)
-    assert api.check_query_length(q) < 1.0
+    q = create_query(137)
+    assert 0.99 < api.check_query_length(q) < 1.0
     api.query_raw(q)
 
     # Expect HTTP status 500 Internal Server Error
-    q = create_query(118)
-    assert api.check_query_length(q) >= 1.0
+    q = create_query(138)
+    assert 1.0 <= api.check_query_length(q) < 1.01
     with pytest.raises(SentinelAPIError) as excinfo:
         api.query_raw(q)
     assert excinfo.value.response.status_code == 500

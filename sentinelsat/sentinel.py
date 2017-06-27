@@ -138,7 +138,7 @@ class SentinelAPI:
         for kw in sorted(keywords):
             query_parts += ['%s:%s' % (kw, keywords[kw])]
 
-        query = ' AND '.join(query_parts)
+        query = ' '.join(query_parts)
         # plus symbols would be interpreted as spaces without escaping
         query = query.replace('+', '%2B')
         return query
