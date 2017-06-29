@@ -7,20 +7,19 @@ from click.testing import CliRunner
 
 from sentinelsat import InvalidChecksumError, SentinelAPI
 from sentinelsat.scripts.cli import cli
-from .shared import my_vcr, FIXTURES_DIR
 
 _api_auth = [environ.get('SENTINEL_USER', "user"), environ.get('SENTINEL_PASSWORD', "pw")]
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
-def test_cli():
+def test_cli(fixture_path):
     runner = CliRunner()
     result = runner.invoke(
         cli,
         ['search'] +
         _api_auth +
-        [FIXTURES_DIR + '/map.geojson'],
+        [fixture_path('map.geojson')],
         catch_exceptions=False
     )
 
@@ -30,7 +29,7 @@ def test_cli():
         cli,
         ['search'] +
         _api_auth +
-        [FIXTURES_DIR + '/map.geojson',
+        [fixture_path('map.geojson'),
          '--url', 'https://scihub.copernicus.eu/dhus/'],
         catch_exceptions=False
     )
@@ -40,23 +39,23 @@ def test_cli():
         cli,
         ['search'] +
         _api_auth +
-        [FIXTURES_DIR + '/map.geojson',
+        [fixture_path('map.geojson'),
          '-q', 'producttype=GRD,polarisationmode=HH'],
         catch_exceptions=False
     )
     assert result.exit_code == 0
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
-def test_returned_filesize():
+def test_returned_filesize(fixture_path):
     runner = CliRunner()
 
     result = runner.invoke(
         cli,
         ['search'] +
         _api_auth +
-        [FIXTURES_DIR + '/map.geojson',
+        [fixture_path('map.geojson'),
          '--url', 'https://scihub.copernicus.eu/dhus/',
          '-s', '20141205',
          '-e', '20141208',
@@ -70,7 +69,7 @@ def test_returned_filesize():
         cli,
         ['search'] +
         _api_auth +
-        [FIXTURES_DIR + '/map.geojson',
+        [fixture_path('map.geojson'),
          '--url', 'https://scihub.copernicus.eu/dhus/',
          '-s', '20140101',
          '-e', '20141231',
@@ -82,15 +81,15 @@ def test_returned_filesize():
     assert result.output.split("\n")[-2] == expected
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
-def test_cloud_flag_url():
+def test_cloud_flag_url(fixture_path):
     runner = CliRunner()
     result = runner.invoke(
         cli,
         ['search'] +
         _api_auth +
-        [FIXTURES_DIR + '/map.geojson',
+        [fixture_path('map.geojson'),
          '--url', 'https://scihub.copernicus.eu/apihub/',
          '-s', '20151219',
          '-e', '20151228',
@@ -105,15 +104,15 @@ def test_cloud_flag_url():
     assert '0848f6b8-5730-4759-850e-fc9945d42296' not in re.findall("^Product .+$", result.output, re.M)[1]
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
-def test_order_by_flag():
+def test_order_by_flag(fixture_path):
     runner = CliRunner()
     result = runner.invoke(
         cli,
         ['search'] +
         _api_auth +
-        [FIXTURES_DIR + '/map.geojson',
+        [fixture_path('map.geojson'),
          '--url', 'https://scihub.copernicus.eu/apihub/',
          '-s', '20151219',
          '-e', '20151228',
@@ -126,15 +125,15 @@ def test_order_by_flag():
     assert '0848f6b8-5730-4759-850e-fc9945d42296' in re.findall("^Product .+$", result.output, re.M)[1]
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
-def test_sentinel1_flag():
+def test_sentinel1_flag(fixture_path):
     runner = CliRunner()
     result = runner.invoke(
         cli,
         ['search'] +
         _api_auth +
-        [FIXTURES_DIR + '/map.geojson',
+        [fixture_path('map.geojson'),
          '--url', 'https://scihub.copernicus.eu/apihub/',
          '-s', '20151219',
          '-e', '20151228',
@@ -146,15 +145,15 @@ def test_sentinel1_flag():
     assert re.findall("^Product .+$", result.output, re.M)[4] == expected
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
-def test_sentinel2_flag():
+def test_sentinel2_flag(fixture_path):
     runner = CliRunner()
     result = runner.invoke(
         cli,
         ['search'] +
         _api_auth +
-        [FIXTURES_DIR + '/map.geojson',
+        [fixture_path('map.geojson'),
          '--url', 'https://scihub.copernicus.eu/apihub/',
          '-s', '20151219',
          '-e', '20151228',
@@ -166,16 +165,16 @@ def test_sentinel2_flag():
     assert re.findall("^Product .+$", result.output, re.M)[2] == expected
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
-def test_sentinel3_flag():
+def test_sentinel3_flag(fixture_path):
     # preliminary Sentinel-3 test using S3 Pre-Ops Hub until data is included in OpenAccessHub
     runner = CliRunner()
     result = runner.invoke(
         cli,
         ['search'] +
         ['s3guest', 's3guest'] +
-        [FIXTURES_DIR + '/map.geojson',
+        [fixture_path('map.geojson'),
          '--url', 'https://scihub.copernicus.eu/s3/',
          '-s', '20161201',
          '-e', '20161202',
@@ -187,15 +186,15 @@ def test_sentinel3_flag():
     assert re.findall("^Product .+$", result.output, re.M)[3] == expected
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
-def test_product_flag():
+def test_product_flag(fixture_path):
     runner = CliRunner()
     result = runner.invoke(
         cli,
         ['search'] +
         _api_auth +
-        [FIXTURES_DIR + '/map.geojson',
+        [fixture_path('map.geojson'),
          '--url', 'https://scihub.copernicus.eu/apihub/',
          '-s', '20161201',
          '-e', '20161202',
@@ -207,16 +206,16 @@ def test_product_flag():
     assert re.findall("^Product .+$", result.output, re.M)[3] == expected
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
-def test_instrument_flag():
+def test_instrument_flag(fixture_path):
     # preliminary Sentinel-3 test using S3 Pre-Ops Hub until data is included in OpenAccessHub
     runner = CliRunner()
     result = runner.invoke(
         cli,
         ['search'] +
         ['s3guest', 's3guest'] +
-        [FIXTURES_DIR + '/map.geojson',
+        [fixture_path('map.geojson'),
          '--url', 'https://scihub.copernicus.eu/s3/',
          '-s', '20161201',
          '-e', '20161202',
@@ -228,16 +227,16 @@ def test_instrument_flag():
     assert re.findall("^Product .+$", result.output, re.M)[0] == expected
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
-def test_option_hierarchy():
+def test_option_hierarchy(fixture_path):
     # expected hierarchy is producttype > instrument > plattform from most to least specific
     runner = CliRunner()
     result = runner.invoke(
         cli,
         ['search'] +
         _api_auth +
-        [FIXTURES_DIR + '/map.geojson',
+        [fixture_path('map.geojson'),
          '--url', 'https://scihub.copernicus.eu/apihub/',
          '-s', '20161201',
          '-e', '20161202',
@@ -251,16 +250,16 @@ def test_option_hierarchy():
     assert re.findall("^Product .+$", result.output, re.M)[1] == expected
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
-def test_limit_flag():
+def test_limit_flag(fixture_path):
     runner = CliRunner()
     limit = 15
     result = runner.invoke(
         cli,
         ['search'] +
         _api_auth +
-        [FIXTURES_DIR + '/map.geojson',
+        [fixture_path('map.geojson'),
          '--url', 'https://scihub.copernicus.eu/apihub/',
          '-s', '20161201',
          '-e', '20161230',
@@ -271,15 +270,15 @@ def test_limit_flag():
     assert num_products == limit
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
-def test_footprints_cli(tmpdir):
+def test_footprints_cli(fixture_path, tmpdir):
     runner = CliRunner()
     result = runner.invoke(
         cli,
         ['search'] +
         _api_auth +
-        [FIXTURES_DIR + '/map.geojson',
+        [fixture_path('map.geojson'),
          '-s', '20151219',
          '-e', '20151228',
          '--sentinel2',
@@ -289,7 +288,7 @@ def test_footprints_cli(tmpdir):
     )
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
 def test_download_single(tmpdir):
     runner = CliRunner()
@@ -346,13 +345,13 @@ def test_download_single(tmpdir):
     tmpdir.remove()
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
-def test_download_many(tmpdir):
+def test_download_many(fixture_path, tmpdir):
     runner = CliRunner()
 
     command = ['search'] + _api_auth + [
-        FIXTURES_DIR + '/map_download.geojson',
+        fixture_path('map_download.geojson'),
         '-s', '20150501',
         '-e', '20150705',
         '-q', 'producttype=OCN',
@@ -417,7 +416,7 @@ def test_download_many(tmpdir):
     tmpdir.remove()
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
 def test_download_invalid_id(tmpdir):
     runner = CliRunner()

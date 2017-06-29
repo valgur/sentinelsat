@@ -13,7 +13,6 @@ from sentinelsat import InvalidChecksumError, SentinelAPI, SentinelAPIError, geo
     read_geojson
 from sentinelsat.sentinel import _format_order_by, _format_query_date, _md5_compare, \
     _parse_odata_timestamp, _parse_opensearch_response
-from .shared import FIXTURES_DIR, my_vcr
 
 _api_auth = dict(user=environ.get('SENTINEL_USER'), password=environ.get('SENTINEL_PASSWORD'))
 
@@ -31,27 +30,21 @@ _large_query = dict(
 
 
 @pytest.fixture(scope='session')
-@my_vcr.use_cassette('products_fixture', decode_compressed_response=False)
-def products():
-    """A fixture for tests that need some non-specific set of products as input."""
+def raw_products(fixture_path, vcr):
+    """A fixture for tests that need some non-specific set of products
+    in the form of a raw response as input."""
     api = SentinelAPI(**_api_auth)
-    products = api.query(
-        geojson_to_wkt(read_geojson(FIXTURES_DIR + '/map.geojson')),
-        "20151219", "20151228"
-    )
-    return products
+    with vcr.use_cassette('products_fixture', decode_compressed_response=False):
+        return api._load_query(api.format_query(
+            geojson_to_wkt(read_geojson(fixture_path('map.geojson'))),
+            "20151219", "20151228")
+        )[0]
 
 
 @pytest.fixture(scope='session')
-@my_vcr.use_cassette('products_fixture')
-def raw_products():
-    """A fixture for tests that need some non-specific set of products in the form of a raw response as input."""
-    api = SentinelAPI(**_api_auth)
-    raw_products = api._load_query(api.format_query(
-        geojson_to_wkt(read_geojson(FIXTURES_DIR + '/map.geojson')),
-        "20151219", "20151228")
-    )[0]
-    return raw_products
+def products(raw_products):
+    """A fixture for tests that need some non-specific set of products as input."""
+    return _parse_opensearch_response(raw_products)
 
 
 @pytest.mark.fast
@@ -95,28 +88,28 @@ def test_convert_timestamp():
 
 
 @pytest.mark.fast
-def test_md5_comparison():
+def test_md5_comparison(fixture_path):
     testfile_md5 = hashlib.md5()
-    with open(FIXTURES_DIR + "/expected_search_footprints_s1.geojson", "rb") as testfile:
+    with open(fixture_path('expected_search_footprints_s1.geojson'), "rb") as testfile:
         testfile_md5.update(testfile.read())
         real_md5 = testfile_md5.hexdigest()
-    assert _md5_compare(FIXTURES_DIR + "/expected_search_footprints_s1.geojson", real_md5) is True
-    assert _md5_compare(FIXTURES_DIR + "/map.geojson", real_md5) is False
+    assert _md5_compare(fixture_path('expected_search_footprints_s1.geojson'), real_md5) is True
+    assert _md5_compare(fixture_path('map.geojson'), real_md5) is False
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
 def test_SentinelAPI_connection():
     api = SentinelAPI(**_api_auth)
-    api.query(**_small_query)
 
+    api.query(**_small_query)
     assert api._last_query == (
         'beginPosition:[2015-01-01T00:00:00Z TO 2015-01-02T00:00:00Z] '
         'AND footprint:"Intersects(POLYGON((0 0,1 1,0 1,0 0)))"')
     assert api._last_response.status_code == 200
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
 def test_SentinelAPI_wrong_credentials():
     api = SentinelAPI(
@@ -140,7 +133,7 @@ def test_SentinelAPI_wrong_credentials():
     assert excinfo.value.response.status_code == 401
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.fast
 def test_api_query_format():
     api = SentinelAPI("mock_user", "mock_password")
@@ -164,7 +157,7 @@ def test_api_query_format():
     assert query == ''
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
 def test_invalid_query():
     api = SentinelAPI(**_api_auth)
@@ -219,7 +212,7 @@ def test_format_order_by():
         _format_order_by("+cloudcoverpercentage-beginposition")
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
 def test_small_query():
     api = SentinelAPI(**_api_kwargs)
@@ -230,7 +223,7 @@ def test_small_query():
     assert api._last_response.status_code == 200
 
 
-@my_vcr.use_cassette(decode_compressed_response=False)
+@pytest.mark.vcr(decode_compressed_response=False)
 @pytest.mark.scihub
 def test_large_query():
     api = SentinelAPI(**_api_kwargs)
@@ -251,7 +244,7 @@ def test_large_query():
     assert result == full_products[-10:]
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
 def test_count():
     api = SentinelAPI(**_api_kwargs)
@@ -260,7 +253,7 @@ def test_count():
     assert count > 100000
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
 def test_too_long_query():
     api = SentinelAPI(**_api_kwargs)
@@ -285,7 +278,7 @@ def test_too_long_query():
     assert "failed due to its length" in excinfo.value.msg
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
 def test_date_arithmetic():
     api = SentinelAPI(**_api_kwargs)
@@ -296,7 +289,7 @@ def test_date_arithmetic():
     assert len(products) > 0
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
 def test_quote_symbol_bug():
     # A test to check if plus symbol handling has been fixed in the DHuS
@@ -313,14 +306,14 @@ def test_quote_symbol_bug():
 
 
 @pytest.mark.fast
-def test_get_coordinates():
+def test_get_coordinates(fixture_path):
     wkt = ('POLYGON((-66.2695 -8.0592,-66.2695 0.7031,'
            '-57.3047 0.7031,-57.3047 -8.0592,-66.2695 -8.0592))')
-    assert geojson_to_wkt(read_geojson(FIXTURES_DIR + '/map.geojson')) == wkt
-    assert geojson_to_wkt(read_geojson(FIXTURES_DIR + '/map_z.geojson')) == wkt
+    assert geojson_to_wkt(read_geojson(fixture_path('map.geojson'))) == wkt
+    assert geojson_to_wkt(read_geojson(fixture_path('map_z.geojson'))) == wkt
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
 def test_get_product_odata_short():
     api = SentinelAPI(**_api_auth)
@@ -362,7 +355,7 @@ def test_get_product_odata_short():
             assert ret[k] == expected[k]
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
 def test_get_product_odata_full():
     api = SentinelAPI(**_api_auth)
@@ -474,7 +467,7 @@ def test_get_product_odata_full():
             assert ret[k] == expected[k]
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
 def test_get_product_info_bad_key():
     api = SentinelAPI(**_api_auth)
@@ -574,7 +567,7 @@ def test_scihub_unresponsive():
 
 
 @pytest.mark.mock_api
-def test_get_products_invalid_json():
+def test_get_products_invalid_json(fixture_path):
     api = SentinelAPI("mock_user", "mock_password")
     with requests_mock.mock() as rqst:
         rqst.post(
@@ -583,7 +576,7 @@ def test_get_products_invalid_json():
         )
         with pytest.raises(SentinelAPIError) as excinfo:
             api.query(
-                area=geojson_to_wkt(read_geojson(FIXTURES_DIR + "/map.geojson")),
+                area=geojson_to_wkt(read_geojson(fixture_path('map.geojson'))),
                 initial_date="20151219",
                 end_date="20151228",
                 platformname="Sentinel-2"
@@ -591,12 +584,12 @@ def test_get_products_invalid_json():
         assert excinfo.value.msg == "Invalid API response."
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
-def test_footprints_s1():
+def test_footprints_s1(fixture_path):
     api = SentinelAPI(**_api_auth)
     products = api.query(
-        geojson_to_wkt(read_geojson(FIXTURES_DIR + '/map.geojson')),
+        geojson_to_wkt(read_geojson(fixture_path('map.geojson'))),
         datetime(2014, 10, 10), datetime(2014, 12, 31), producttype="GRD"
     )
 
@@ -605,31 +598,31 @@ def test_footprints_s1():
         validation = geojson.is_valid(footprint['geometry'])
         assert validation['valid'] == 'yes', validation['message']
 
-    with open(FIXTURES_DIR + '/expected_search_footprints_s1.geojson') as geojson_file:
+    with open(fixture_path('expected_search_footprints_s1.geojson')) as geojson_file:
         expected_footprints = geojson.loads(geojson_file.read())
     # to compare unordered lists (JSON objects) they need to be sorted or changed to sets
     assert set(footprints) == set(expected_footprints)
 
 
 @pytest.mark.scihub
-def test_footprints_s2(products):
+def test_footprints_s2(products, fixture_path):
     footprints = SentinelAPI.to_geojson(products)
     for footprint in footprints['features']:
         validation = geojson.is_valid(footprint['geometry'])
         assert validation['valid'] == 'yes', validation['message']
 
-    with open(FIXTURES_DIR + '/expected_search_footprints_s2.geojson') as geojson_file:
+    with open(fixture_path('expected_search_footprints_s2.geojson')) as geojson_file:
         expected_footprints = geojson.loads(geojson_file.read())
     # to compare unordered lists (JSON objects) they need to be sorted or changed to sets
     assert set(footprints) == set(expected_footprints)
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
-def test_s2_cloudcover():
+def test_s2_cloudcover(fixture_path):
     api = SentinelAPI(**_api_auth)
     products = api.query(
-        geojson_to_wkt(read_geojson(FIXTURES_DIR + '/map.geojson')),
+        geojson_to_wkt(read_geojson(fixture_path('map.geojson'))),
         "20151219", "20151228",
         platformname="Sentinel-2",
         cloudcoverpercentage="[0 TO 10]"
@@ -646,12 +639,12 @@ def test_s2_cloudcover():
     assert sorted(vals) != vals
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
-def test_order_by():
+def test_order_by(fixture_path):
     api = SentinelAPI(**_api_auth)
     products = api.query(
-        geojson_to_wkt(read_geojson(FIXTURES_DIR + '/map.geojson')),
+        geojson_to_wkt(read_geojson(fixture_path('map.geojson'))),
         "20151219", "20151228",
         platformname="Sentinel-2",
         cloudcoverpercentage="[0 TO 10]",
@@ -662,7 +655,7 @@ def test_order_by():
     assert sorted(vals) == vals
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
 def test_area_relation():
     api = SentinelAPI(**_api_auth)
@@ -688,12 +681,12 @@ def test_area_relation():
 
 
 @pytest.mark.scihub
-def test_get_products_size(products):
+def test_get_products_size(products, vcr):
     assert SentinelAPI.get_products_size(products) == 90.94
 
     # load a new very small query
     api = SentinelAPI(**_api_auth)
-    with my_vcr.use_cassette('test_get_products_size'):
+    with vcr.use_cassette('test_get_products_size'):
         products = api.query_raw(
             "S1A_WV_OCN__2SSH_20150603T092625_20150603T093332_006207_008194_521E")
     assert len(products) > 0
@@ -728,7 +721,7 @@ def test_to_geopandas(products):
     assert abs(gdf.unary_union.area - 132.16) < 0.01
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
 def test_download(tmpdir):
     api = SentinelAPI(**_api_auth)
@@ -795,7 +788,7 @@ def test_download(tmpdir):
     tmpdir.remove()
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
 def test_download_all(tmpdir):
     api = SentinelAPI(**_api_auth)
@@ -839,7 +832,7 @@ def test_download_all(tmpdir):
     tmpdir.remove()
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
 def test_download_invalid_id():
     api = SentinelAPI(**_api_auth)
@@ -849,7 +842,7 @@ def test_download_invalid_id():
         assert 'Invalid key' in excinfo.value.msg
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
 def test_query_by_names():
     api = SentinelAPI(**_api_auth)
@@ -868,7 +861,7 @@ def test_query_by_names():
     assert result == result2
 
 
-@my_vcr.use_cassette
+@pytest.mark.vcr
 @pytest.mark.scihub
 def test_check_existing(tmpdir):
     api = SentinelAPI(**_api_auth)
