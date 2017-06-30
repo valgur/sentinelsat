@@ -29,19 +29,22 @@ _large_query = dict(
     end_date=datetime(2015, 12, 31))
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture
 def raw_products(fixture_path, vcr):
     """A fixture for tests that need some non-specific set of products
     in the form of a raw response as input."""
     api = SentinelAPI(**_api_auth)
-    with vcr.use_cassette('products_fixture', decode_compressed_response=False):
+    mode = vcr.record_mode
+    if mode == 'all':
+        mode = 'once'
+    with vcr.use_cassette('products_fixture', decode_compressed_response=False, record_mode=mode):
         return api._load_query(api.format_query(
             geojson_to_wkt(read_geojson(fixture_path('map.geojson'))),
             "20151219", "20151228")
         )[0]
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture
 def products(raw_products):
     """A fixture for tests that need some non-specific set of products as input."""
     return _parse_opensearch_response(raw_products)

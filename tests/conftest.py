@@ -1,6 +1,7 @@
 from os.path import abspath, dirname, join
 
 import pytest
+from pytest_socket import disable_socket
 
 from .custom_serializer import BinaryContentSerializer
 
@@ -27,13 +28,8 @@ def fixture_path(fixtures_dir):
 
 
 @pytest.fixture(scope='session')
-def cassette_dir(fixtures_dir):
+def vcr_cassette_dir(fixtures_dir):
     return join(fixtures_dir, 'vcr_cassettes')
-
-
-@pytest.fixture
-def vcr_cassette_path(vcr_cassette_name):
-    return vcr_cassette_name
 
 
 def scrub_response(response):
@@ -48,9 +44,8 @@ def range_header_matcher(r1, r2):
 
 
 @pytest.fixture(scope='session')
-def vcr_config(cassette_dir):
+def vcr_config():
     return dict(
-        cassette_library_dir=cassette_dir,
         record_mode='none',
         filter_headers=['Authorization', 'Set-Cookie', 'Cookie'],
         before_record_response=scrub_response,
@@ -59,14 +54,16 @@ def vcr_config(cassette_dir):
     )
 
 
-@pytest.fixture(scope='session')
-def vcr(vcr, cassette_dir):
-    vcr.register_serializer('custom', BinaryContentSerializer(cassette_dir))
+@pytest.fixture(scope='module')
+def vcr(vcr, vcr_cassette_dir):
+    vcr.register_serializer('custom', BinaryContentSerializer(vcr_cassette_dir))
     vcr.serializer = 'custom'
     vcr.register_matcher('range_header', range_header_matcher)
     return vcr
 
 
-@pytest.fixture(autouse=True, scope='session')
-def enable_autoblock(autoblock_network):
-    return
+@pytest.fixture(scope='module', autouse=True)
+def autoblock_network(vcr):
+    if vcr.record_mode == 'none':
+        print('Cassettes are not being recorded, any network calls will be blocked.')
+        disable_socket()
