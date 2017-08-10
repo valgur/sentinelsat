@@ -85,7 +85,6 @@ def _set_logger_handler(level='INFO'):
     '--md5', is_flag=True,
     help='Verify the MD5 checksum and write corrupt product ids and filenames to corrupt_scenes.txt.')
 @click.version_option(version=sentinelsat_version, prog_name="sentinelsat")
-
 def cli(user, password, geometry, start, end, uuid, name, download, md5, sentinel, producttype,
         instrument, cloud, footprints, path, query, url, order_by, limit):
     """Search for Sentinel products and, optionally, download all the results
@@ -118,6 +117,7 @@ def cli(user, password, geometry, start, end, uuid, name, download, md5, sentine
     if query is not None:
         search_kwargs.update((x.split('=') for x in query.split(',')))
 
+    wkt = None
     if geometry is not None:
         wkt = geojson_to_wkt(read_geojson(geometry))
 

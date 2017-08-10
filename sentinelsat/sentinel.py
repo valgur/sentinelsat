@@ -280,7 +280,8 @@ class SentinelAPI:
             props['id'] = product_id
             poly = geomet.wkt.loads(props['footprint'])
             del props['footprint']
-            del props['gmlfootprint']
+            if 'gmlfootprint' in props:
+                del props['gmlfootprint']
             # Fix "'datetime' is not JSON serializable"
             for k, v in props.items():
                 if isinstance(v, (date, datetime)):

@@ -1,5 +1,5 @@
-from os import environ, path
 import re
+from os import environ, path
 
 import pytest
 import requests_mock
@@ -7,51 +7,50 @@ from click.testing import CliRunner
 
 from sentinelsat import InvalidChecksumError, SentinelAPI
 from sentinelsat.scripts.cli import cli
-from .shared import my_vcr, FIXTURES_DIR
+from .shared import FIXTURES_DIR, my_vcr
 
 _api_auth = [environ.get('SENTINEL_USER', "user"), environ.get('SENTINEL_PASSWORD', "pw")]
+
 
 # TODO: change test fictures from subcommands to unified commands
 # TODO: include test for --uuid option, with comma separated list.
 
+
+@pytest.mark.parametrize('extra_args', [
+    [],
+    ['--url', 'https://scihub.copernicus.eu/dhus/'],
+    ['-q', 'producttype=GRD,polarisationmode=HH']
+], ids=lambda arg: ' '.join(arg) if isinstance(arg, list) else arg)
 @my_vcr.use_cassette
 @pytest.mark.scihub
-def test_cli():
+def test_cli(extra_args):
     runner = CliRunner()
     result = runner.invoke(
         cli,
         ['--user', _api_auth[0],
          '--password', _api_auth[1],
-         '--geometry', path.join(FIXTURES_DIR, 'map.geojson')],
-        catch_exceptions=False
-    )
-
-    assert result.exit_code == 0
-
-    result = runner.invoke(
-        cli,
-        ['--user', _api_auth[0],
-         '--password', _api_auth[1],
-         '--geometry', path.join(FIXTURES_DIR, 'map.geojson'),
-         '--url', 'https://scihub.copernicus.eu/dhus/'],
-        catch_exceptions=False
-    )
-    assert result.exit_code == 0
-
-    result = runner.invoke(
-        cli,
-        ['--user', _api_auth[0],
-         '--password', _api_auth[1],
-         '--geometry', path.join(FIXTURES_DIR, 'map.geojson'),
-         '-q', 'producttype=GRD,polarisationmode=HH'],
+         '--geometry', path.join(FIXTURES_DIR, 'map.geojson')
+         ] + extra_args,
         catch_exceptions=False
     )
     assert result.exit_code == 0
 
 
+@pytest.mark.parametrize('extra_args, expected', [
+    (['-s', '20141205',
+      '-e', '20141208',
+      '-q', 'producttype=GRD'],
+     "1 scenes found with a total size of 0.50 GB"
+     ),
+    (['-s', '20140101',
+      '-e', '20141231',
+      '-q', 'producttype=GRD'],
+     "20 scenes found with a total size of 11.06 GB"
+     )
+], ids=lambda arg: ' '.join(arg) if isinstance(arg, list) else arg)
 @my_vcr.use_cassette
 @pytest.mark.scihub
-def test_returned_filesize():
+def test_returned_filesize(extra_args, expected):
     runner = CliRunner()
 
     result = runner.invoke(
@@ -60,26 +59,9 @@ def test_returned_filesize():
          '--password', _api_auth[1],
          '--geometry', path.join(FIXTURES_DIR, 'map.geojson'),
          '--url', 'https://scihub.copernicus.eu/dhus/',
-         '-s', '20141205',
-         '-e', '20141208',
-         '-q', 'producttype=GRD'],
+         ] + extra_args,
         catch_exceptions=False
     )
-    expected = "1 scenes found with a total size of 0.50 GB"
-    assert result.output.split("\n")[-2] == expected
-
-    result = runner.invoke(
-        cli,
-        ['--user', _api_auth[0],
-         '--password', _api_auth[1],
-         '--geometry', path.join(FIXTURES_DIR, 'map.geojson'),
-         '--url', 'https://scihub.copernicus.eu/dhus/',
-         '-s', '20140101',
-         '-e', '20141231',
-         '-q', 'producttype=GRD'],
-        catch_exceptions=False
-    )
-    expected = "20 scenes found with a total size of 11.06 GB"
 
     assert result.output.split("\n")[-2] == expected
 
@@ -88,12 +70,12 @@ def test_returned_filesize():
 @pytest.mark.scihub
 def test_cloud_flag_url():
     command = ['--user', _api_auth[0],
-     '--password', _api_auth[1],
-     '--geometry', path.join(FIXTURES_DIR, 'map.geojson'),
-     '--url', 'https://scihub.copernicus.eu/apihub/',
-     '-s', '20151219',
-     '-e', '20151228',
-     '-c', '10']
+               '--password', _api_auth[1],
+               '--geometry', path.join(FIXTURES_DIR, 'map.geojson'),
+               '--url', 'https://scihub.copernicus.eu/apihub/',
+               '-s', '20151219',
+               '-e', '20151228',
+               '-c', '10']
 
     runner = CliRunner()
     result = runner.invoke(
@@ -105,8 +87,8 @@ def test_cloud_flag_url():
     expected = "Product 6ed0b7de-3435-43df-98bf-ad63c8d077ef - Date: 2015-12-27T14:22:29Z, Instrument: MSI, Mode: , Satellite: Sentinel-2, Size: 5.47 GB"
     assert re.findall("^Product .+$", result.output, re.M)[0] == expected
     # For order-by test
-    assert '0848f6b8-5730-4759-850e-fc9945d42296' not in re.findall("^Product .+$", result.output, re.M)[1]
-
+    assert '0848f6b8-5730-4759-850e-fc9945d42296' not in \
+           re.findall("^Product .+$", result.output, re.M)[1]
 
     with pytest.raises(ValueError) as excinfo:
         result = runner.invoke(
@@ -114,6 +96,7 @@ def test_cloud_flag_url():
             command + ['--sentinel', '1'],
             catch_exceptions=False
         )
+
 
 @my_vcr.use_cassette
 @pytest.mark.scihub
@@ -132,8 +115,9 @@ def test_order_by_flag():
          '--order-by', 'cloudcoverpercentage,-beginposition'],
         catch_exceptions=False
     )
-    print(result.output)
-    assert '0848f6b8-5730-4759-850e-fc9945d42296' in re.findall("^Product .+$", result.output, re.M)[1]
+
+    assert '0848f6b8-5730-4759-850e-fc9945d42296' in \
+           re.findall("^Product .+$", result.output, re.M)[1]
 
 
 @my_vcr.use_cassette
@@ -313,22 +297,30 @@ def test_option_hierarchy():
     assert re.findall("^Product .+$", result.output, re.M)[1] == expected
 
 
+@pytest.mark.parametrize("args", [
+    ['--geometry', path.join(FIXTURES_DIR, 'map.geojson'),
+     '-s', '20151219',
+     '-e', '20151228',
+     '--sentinel2'],
+    ['--uuid', '1f62a176-c980-41dc-b3a1-c735d660c910,'
+               '5618ce1b-923b-4df2-81d9-50b53e5aded9,'
+               'd8340134-878f-4891-ba4f-4df54f1e3ab4']
+], ids=lambda arg: ' '.join(arg))
 @my_vcr.use_cassette
 @pytest.mark.scihub
-def test_footprints_cli(tmpdir):
+def test_footprints_cli(tmpdir, args):
     runner = CliRunner()
     result = runner.invoke(
         cli,
         ['--user', _api_auth[0],
          '--password', _api_auth[1],
-         '--geometry', path.join(FIXTURES_DIR, 'map.geojson'),
-         '-s', '20151219',
-         '-e', '20151228',
-         '--sentinel2',
          '--path', str(tmpdir),
-         '--footprints'],
+         '--footprints'] + args,
         catch_exceptions=False
     )
+    assert result.exit_code == 0
+    expected_path = tmpdir.join('search_footprints.geojson')
+    assert expected_path.check(exists=1, file=1)
 
 
 @my_vcr.use_cassette
@@ -338,10 +330,10 @@ def test_download_single(tmpdir):
 
     product_id = '5618ce1b-923b-4df2-81d9-50b53e5aded9'
     command = ['--user', _api_auth[0],
-        '--password', _api_auth[1],
-        '--uuid', product_id,
-        '--download',
-        '--path', str(tmpdir)]
+               '--password', _api_auth[1],
+               '--uuid', product_id,
+               '--download',
+               '--path', str(tmpdir)]
     result = runner.invoke(
         cli,
         command,
@@ -398,11 +390,11 @@ def test_download_many(tmpdir):
     runner = CliRunner()
 
     command = ['--user', _api_auth[0],
-        '--password', _api_auth[1],
-        '--uuid',
-        '1f62a176-c980-41dc-b3a1-c735d660c910,5618ce1b-923b-4df2-81d9-50b53e5aded9,d8340134-878f-4891-ba4f-4df54f1e3ab4',
-        '--download',
-        '--path', str(tmpdir)]
+               '--password', _api_auth[1],
+               '--uuid',
+               '1f62a176-c980-41dc-b3a1-c735d660c910,5618ce1b-923b-4df2-81d9-50b53e5aded9,d8340134-878f-4891-ba4f-4df54f1e3ab4',
+               '--download',
+               '--path', str(tmpdir)]
 
     # Download 3 tiny products
     result = runner.invoke(
@@ -468,10 +460,10 @@ def test_download_invalid_id(tmpdir):
     runner = CliRunner()
     product_id = 'f30b2a6a-b0c1-49f1-INVALID-e10c3cf06101'
     command = ['--user', _api_auth[0],
-        '--password', _api_auth[1],
-        '--uuid', product_id,
-        '--download',
-        '--path', str(tmpdir)]
+               '--password', _api_auth[1],
+               '--uuid', product_id,
+               '--download',
+               '--path', str(tmpdir)]
 
     result = runner.invoke(
         cli,
