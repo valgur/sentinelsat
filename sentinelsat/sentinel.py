@@ -750,7 +750,9 @@ class SentinelAPI:
         product_infos = {}
         online_prods = {}
         offline_prods = {}
-        for pid in self._tqdm(iterable=product_ids, desc="Fetching archival status", unit=" products"):
+        for pid in self._tqdm(
+            iterable=product_ids, desc="Fetching archival status", unit=" products"
+        ):
             info = self.get_product_odata(pid)
             product_infos[pid] = info
             if info["Online"]:
