@@ -236,11 +236,14 @@ class SentinelAPI:
             # Escape spaces, where appropriate
             if isinstance(value, string_types):
                 value = value.strip()
+                if value == "":
+                    raise ValueError("Trying to filter '{}' with an empty string")
                 if not any(
                     value.startswith(s[0]) and value.endswith(s[1])
                     for s in ["[]", "{}", "//", "()"]
                 ):
-                    value = re.sub(r"\s", r"\ ", value, re.M)
+                    value = re.sub(r"\s", " ", value, re.M)
+                    value = '"{}"'.format(value)
 
             # Handle date keywords
             # Keywords from https://github.com/SentinelDataHub/DataHubSystem/search?q=text/date+iso8601
@@ -248,7 +251,7 @@ class SentinelAPI:
             if attr.lower() in date_attrs:
                 # Automatically format date-type attributes
                 if isinstance(value, set):
-                    value = "({})".format(" OR ".join(sorted(map(format_query_date, value))))
+                    value = set(map(format_query_date, value))
                 elif isinstance(value, string_types) and " TO " in value:
                     # This is a string already formatted as a date interval,
                     # e.g. '[NOW-1DAY TO NOW]'
@@ -263,16 +266,21 @@ class SentinelAPI:
 
             # Handle sets as logical OR
             if isinstance(value, set):
-                value = "({})".format(" OR ".join(map(str, sorted(value))))
-
+                if len(value) == 0:
+                    raise ValueError("Trying to filter '{}' with an empty set".format(attr))
+                if not all(x != "" for x in value):
+                    raise ValueError("Trying to filter '{}' with a set empty strings".format(attr))
+                value = "({})".format(" OR ".join(sorted('"{}"'.format(x) for x in value)))
             # Handle ranged values
-            if isinstance(value, (list, tuple)):
+            elif isinstance(value, (list, tuple)):
                 # Handle value ranges
                 if len(value) == 2:
                     # Allow None to be used as a unlimited bound
-                    value = ["*" if x is None else x for x in value]
+                    value = ["*" if x in (None, "*") else '"{}"'.format(x) for x in value]
                     if all(x == "*" for x in value):
                         continue
+                    if not all(x != "" for x in value):
+                        raise ValueError("Trying to filter '{}' with an empty string".format(attr))
                     value = "[{} TO {}]".format(*value)
                 else:
                     raise ValueError(
