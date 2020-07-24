@@ -233,62 +233,17 @@ class SentinelAPI:
             keywords["beginPosition"] = date
 
         for attr, value in sorted(keywords.items()):
-            # Escape spaces, where appropriate
-            if isinstance(value, string_types):
-                value = value.strip()
-                if value == "":
-                    raise ValueError("Trying to filter '{}' with an empty string")
-                if not any(
-                    value.startswith(s[0]) and value.endswith(s[1])
-                    for s in ["[]", "{}", "//", "()"]
-                ):
-                    value = re.sub(r"\s", " ", value, re.M)
-                    value = '"{}"'.format(value)
-
-            # Handle date keywords
-            # Keywords from https://github.com/SentinelDataHub/DataHubSystem/search?q=text/date+iso8601
-            date_attrs = ["beginposition", "endposition", "date", "creationdate", "ingestiondate"]
-            if attr.lower() in date_attrs:
-                # Automatically format date-type attributes
-                if isinstance(value, set):
-                    value = set(map(format_query_date, value))
-                elif isinstance(value, string_types) and " TO " in value:
-                    # This is a string already formatted as a date interval,
-                    # e.g. '[NOW-1DAY TO NOW]'
-                    pass
-                elif not isinstance(value, string_types) and len(value) == 2:
-                    value = (format_query_date(value[0]), format_query_date(value[1]))
-                else:
-                    raise ValueError(
-                        "Date-type query parameter '{}' expects a two-element tuple "
-                        "of str or datetime objects. Received {}".format(attr, value)
-                    )
-
-            # Handle sets as logical OR
             if isinstance(value, set):
-                if len(value) == 0:
-                    raise ValueError("Trying to filter '{}' with an empty set".format(attr))
-                if not all(x != "" for x in value):
-                    raise ValueError("Trying to filter '{}' with a set empty strings".format(attr))
-                value = "({})".format(" OR ".join(sorted('"{}"'.format(x) for x in value)))
-            # Handle ranged values
-            elif isinstance(value, (list, tuple)):
-                # Handle value ranges
-                if len(value) == 2:
-                    # Allow None to be used as a unlimited bound
-                    value = ["*" if x in (None, "*") else '"{}"'.format(x) for x in value]
-                    if all(x == "*" for x in value):
-                        continue
-                    if not all(x != "" for x in value):
-                        raise ValueError("Trying to filter '{}' with an empty string".format(attr))
-                    value = "[{} TO {}]".format(*value)
-                else:
-                    raise ValueError(
-                        "Invalid number of elements in list. Expected 2, received "
-                        "{}".format(len(value))
-                    )
-
-            query_parts.append("{}:{}".format(attr, value))
+                sub_parts = []
+                for sub_value in value:
+                    sub_value = _format_query_value(attr, sub_value)
+                    if sub_value is not None:
+                        sub_parts.append("{}:{}".format(attr, sub_value))
+                query_parts.append("({})".format(" OR ".join(sub_parts)))
+            else:
+                value = _format_query_value(attr, value)
+                if value is not None:
+                    query_parts.append("{}:{}".format(attr, value))
 
         if raw:
             query_parts.append(raw)
@@ -995,17 +950,9 @@ class SentinelAPI:
             A dictionary mapping each name to a dictionary which contains the products with
             that name (with ID as the key).
         """
-
-        def chunks(l, n):
-            """Yield successive n-sized chunks from l."""
-            for i in range(0, len(l), n):
-                yield l[i : i + n]
-
         products = {}
-        # 40 names per query fits reasonably well inside the query limit
-        for chunk in chunks(names, 40):
-            query = " OR ".join(chunk)
-            products.update(self.query(raw=query))
+        for name in names:
+            products.update(self.query(identifier=name))
 
         # Group the products
         output = OrderedDict((name, dict()) for name in names)
@@ -1267,6 +1214,72 @@ def geojson_to_wkt(geojson_obj, feature_number=0, decimals=4):
     # Strip unnecessary spaces
     wkt = re.sub(r"(?<!\d) ", "", wkt)
     return wkt
+
+
+def _format_query_value(attr, value):
+    """Format the value of a Solr query parameter."""
+
+    # Handle spaces by adding quotes around the string, if appropriate
+    if isinstance(value, string_types):
+        value = value.strip()
+        if value == "":
+            raise ValueError("Trying to filter '{}' with an empty string")
+        # Handle strings surrounded by brackets specially to allow the user to make use of Solr syntax directly.
+        # The string must not be quoted for that to work.
+        if (
+            not any(
+                value.startswith(s[0]) and value.endswith(s[1])
+                for s in ["[]", "{}", "//", "()", '""']
+            )
+            and "*" not in value
+            and "?" not in value
+        ):
+            value = re.sub(r"\s", " ", value, re.M)
+            value = '"{}"'.format(value)
+
+    # Handle date keywords
+    # Keywords from https://github.com/SentinelDataHub/DataHubSystem/search?q=text/date+iso8601
+    is_date_attr = attr.lower() in [
+        "beginposition",
+        "endposition",
+        "date",
+        "creationdate",
+        "ingestiondate",
+    ]
+    if is_date_attr:
+        # Automatically format date-type attributes
+        if isinstance(value, string_types) and " TO " in value:
+            # This is a string already formatted as a date interval,
+            # e.g. '[NOW-1DAY TO NOW]'
+            pass
+        elif isinstance(value, (list, tuple)) and len(value) == 2:
+            value = (format_query_date(value[0]), format_query_date(value[1]))
+        else:
+            raise ValueError(
+                "Date-type query parameter '{}' expects either a two-element tuple "
+                "of str or datetime objects or a '[<from> TO <to>]'-format string. Received {}.".format(
+                    attr, value
+                )
+            )
+
+    if isinstance(value, set):
+        raise ValueError("Unexpected set-type value encountered with keyword '{}'".format(attr))
+    elif isinstance(value, (list, tuple)):
+        # Handle value ranges
+        if len(value) == 2:
+            # Allow None or "*" to be used as an unlimited bound
+            if any(x == "" for x in value):
+                raise ValueError("Trying to filter '{}' with an empty string".format(attr))
+            value = ["*" if x in (None, "*") else '"{}"'.format(x) for x in value]
+            if value == ["*", "*"] or (is_date_attr and value == ["*", "NOW"]):
+                # Drop this keyword if both sides are unbounded
+                return
+            value = "[{} TO {}]".format(*value)
+        else:
+            raise ValueError(
+                "Invalid number of elements in list. Expected 2, received " "{}".format(len(value))
+            )
+    return value
 
 
 def format_query_date(in_date):
