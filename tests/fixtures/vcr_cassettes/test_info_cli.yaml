@@ -9,27 +9,34 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - sentinelsat/0.13
+      - sentinelsat/0.14
     method: GET
     uri: https://scihub.copernicus.eu/apihub/api/stub/version
   response:
     body:
-      string: 'PAGE NOT FOUND
-
-               Oops, something went wrong. The page you were trying to access is (temporarily) unavailable.'
+      string: "<!doctype html>\n<title>Page not found</title>\n<link href='https://fonts.googleapis.com/css?family=Open+Sans'
+        rel='stylesheet' type='text/css'>\n<style>\nbody { text-align: center; padding:
+        125px; background: #fff;}\nh1 { font-size: 50px;padding-top:20px }\nbody {
+        font: 20px 'Open Sans',Helvetica, sans-serif; color: #333; }\narticle { display:
+        block; width: 700px; margin: 0 auto; }\na { color: #dc8100; text-decoration:
+        none; }\na:hover { color: #333; text-decoration: none; }\n</style>\n \n<article>\n<img
+        alt=\"\" src=\"datahub.png\" style=\"float: left;margin: 20px;\">\n<h1>PAGE
+        NOT FOUND</h1>\n<div style=\"margin-left: 145px;\">\n<p style=\"text-align:
+        center;\">\nOops, something went wrong. The page you were trying to access
+        is (temporarily) unavailable.\n</p>\n</div>\n</article>\n"
     headers:
-      Content-Type:
-      - text/html; charset=UTF-8
-      DataServiceVersion:
-      - '2.0'
-      Pragma:
-      - no-cache
-      Server:
-      - Apache-Coyote/1.1
-      Vary:
-      - Accept-Encoding
+      accept-ranges:
+      - bytes
       content-length:
       - '764'
+      content-type:
+      - text/html; charset=UTF-8
+      etag:
+      - '"2fc-525d53f5eea40"'
+      last-modified:
+      - Tue, 01 Dec 2015 12:25:05 GMT
+      server:
+      - Apache
     status:
       code: 404
       message: Not Found
@@ -43,25 +50,21 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - sentinelsat/0.13
+      - sentinelsat/0.14
     method: GET
     uri: https://scihub.copernicus.eu/dhus/api/stub/version
   response:
     body:
       string: '{"value":"2.4.1"}'
     headers:
-      Content-Type:
-      - text/html
-      DataServiceVersion:
-      - '2.0'
-      Pragma:
-      - no-cache
-      Server:
-      - Apache-Coyote/1.1
-      Vary:
-      - Accept-Encoding
       content-length:
       - '17'
+      content-type:
+      - text/plain;charset=ISO-8859-1
+      pragma:
+      - no-cache
+      server:
+      - Apache-Coyote/1.1
     status:
       code: 200
       message: OK

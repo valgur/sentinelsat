@@ -1,6 +1,6 @@
 interactions:
 - request:
-    body: q=beginPosition%3A%5B2015-12-19T00%3A00%3A00Z+TO+2015-12-26T00%3A00%3A00Z%5D+footprint%3A%22Intersects%28POLYGON%28%2810.83+53.04%2C11.64+53.04%2C11.64+52.65%2C10.83+52.65%2C10.83+53.04%29%29%29%22
+    body: q=beginPosition%3A%5B%222015-12-19T00%3A00%3A00Z%22+TO+%222015-12-26T00%3A00%3A00Z%22%5D+footprint%3A%22Intersects%28POLYGON%28%2810.83+53.04%2C11.64+53.04%2C11.64+52.65%2C10.83+52.65%2C10.83+53.04%29%29%29%22
     headers:
       Accept:
       - '*/*'
@@ -9,30 +9,30 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '197'
+      - '209'
       Content-Type:
       - application/x-www-form-urlencoded; charset=UTF-8
       User-Agent:
-      - sentinelsat/0.13
+      - sentinelsat/0.14
     method: POST
     uri: https://scihub.copernicus.eu/apihub/search?format=json&rows=100&start=0
   response:
     body:
       string: '{"feed":{"xmlns:opensearch":"http://a9.com/-/spec/opensearch/1.1/","xmlns":"http://www.w3.org/2005/Atom","title":"Sentinels
-        Scientific Data Hub search results for: beginPosition:[2015-12-19T00:00:00Z
-        TO 2015-12-26T00:00:00Z] footprint:\"Intersects(POLYGON((10.83 53.04,11.64
+        Scientific Data Hub search results for: beginPosition:[\"2015-12-19T00:00:00Z\"
+        TO \"2015-12-26T00:00:00Z\"] footprint:\"Intersects(POLYGON((10.83 53.04,11.64
         53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"","subtitle":"Displaying 13
-        results. Request done in 0.909 seconds.","updated":"2019-04-22T23:19:21.479Z","author":{"name":"Sentinels
-        Scientific Data Hub"},"id":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[2015-12-19T00:00:00Z
-        TO 2015-12-26T00:00:00Z] footprint:\"Intersects(POLYGON((10.83 53.04,11.64
-        53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"","opensearch:totalResults":"13","opensearch:startIndex":"0","opensearch:itemsPerPage":"100","opensearch:Query":{"role":"request","searchTerms":"beginPosition:[2015-12-19T00:00:00Z
-        TO 2015-12-26T00:00:00Z] footprint:\"Intersects(POLYGON((10.83 53.04,11.64
-        53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"","startPage":"1"},"link":[{"rel":"self","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[2015-12-19T00:00:00Z
-        TO 2015-12-26T00:00:00Z] footprint:\"Intersects(POLYGON((10.83 53.04,11.64
-        53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"&start=0&rows=100"},{"rel":"first","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[2015-12-19T00:00:00Z
-        TO 2015-12-26T00:00:00Z] footprint:\"Intersects(POLYGON((10.83 53.04,11.64
-        53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"&start=0&rows=100"},{"rel":"last","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[2015-12-19T00:00:00Z
-        TO 2015-12-26T00:00:00Z] footprint:\"Intersects(POLYGON((10.83 53.04,11.64
+        results. Request done in 0.27 seconds.","updated":"2020-07-24T21:43:01.518Z","author":{"name":"Sentinels
+        Scientific Data Hub"},"id":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[\"2015-12-19T00:00:00Z\"
+        TO \"2015-12-26T00:00:00Z\"] footprint:\"Intersects(POLYGON((10.83 53.04,11.64
+        53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"","opensearch:totalResults":"13","opensearch:startIndex":"0","opensearch:itemsPerPage":"100","opensearch:Query":{"role":"request","searchTerms":"beginPosition:[\"2015-12-19T00:00:00Z\"
+        TO \"2015-12-26T00:00:00Z\"] footprint:\"Intersects(POLYGON((10.83 53.04,11.64
+        53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"","startPage":"1"},"link":[{"rel":"self","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[\"2015-12-19T00:00:00Z\"
+        TO \"2015-12-26T00:00:00Z\"] footprint:\"Intersects(POLYGON((10.83 53.04,11.64
+        53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"&start=0&rows=100"},{"rel":"first","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[\"2015-12-19T00:00:00Z\"
+        TO \"2015-12-26T00:00:00Z\"] footprint:\"Intersects(POLYGON((10.83 53.04,11.64
+        53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"&start=0&rows=100"},{"rel":"last","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[\"2015-12-19T00:00:00Z\"
+        TO \"2015-12-26T00:00:00Z\"] footprint:\"Intersects(POLYGON((10.83 53.04,11.64
         53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"&start=12&rows=100"},{"rel":"search","type":"application/opensearchdescription+xml","href":"opensearch_description.xml"}],"entry":[{"title":"S2A_MSIL1C_20151224T102432_N0201_R065_T32UPD_20151224T102435","link":[{"href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''7e02c2c2-ba4c-44b4-a43d-f2e0ead185e5'')/$value"},{"rel":"alternative","href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''7e02c2c2-ba4c-44b4-a43d-f2e0ead185e5'')/"},{"rel":"icon","href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''7e02c2c2-ba4c-44b4-a43d-f2e0ead185e5'')/Products(''Quicklook'')/$value"}],"id":"7e02c2c2-ba4c-44b4-a43d-f2e0ead185e5","summary":"Date:
         2015-12-24T10:24:32.035Z, Instrument: MSI, Mode: , Satellite: Sentinel-2,
         Size: 783.69 MB","date":[{"name":"datatakesensingstart","content":"2015-12-24T10:24:32.035Z"},{"name":"beginposition","content":"2015-12-24T10:24:32.035Z"},{"name":"endposition","content":"2015-12-24T10:24:32.035Z"},{"name":"ingestiondate","content":"2019-01-10T00:42:48.771Z"}],"int":[{"name":"orbitnumber","content":"2636"},{"name":"relativeorbitnumber","content":"65"}],"double":{"name":"cloudcoverpercentage","content":"56.0"},"str":[{"name":"gmlfootprint","content":"<gml:Polygon
@@ -42,7 +42,7 @@ interactions:
         Instrument"},{"name":"footprint","content":"MULTIPOLYGON (((12.07167849 52.22256603,
         12.1417699 53.20820137, 10.49846043 53.24020835, 10.46498037 52.25345681,
         12.07167849 52.22256603)))"},{"name":"s2datatakeid","content":"GS2A_20151224T102432_002636_N02.01"},{"name":"platformidentifier","content":"2015-028A"},{"name":"orbitdirection","content":"DESCENDING"},{"name":"platformserialidentifier","content":"Sentinel-2A"},{"name":"processingbaseline","content":"02.01"},{"name":"processinglevel","content":"Level-1C"},{"name":"producttype","content":"S2MSI1C"},{"name":"platformname","content":"Sentinel-2"},{"name":"size","content":"783.69
-        MB"},{"name":"tileid","content":"32UPD"},{"name":"hv_order_tileid","content":"UD32P"},{"name":"filename","content":"S2A_MSIL1C_20151224T102432_N0201_R065_T32UPD_20151224T102435.SAFE"},{"name":"identifier","content":"S2A_MSIL1C_20151224T102432_N0201_R065_T32UPD_20151224T102435"},{"name":"uuid","content":"7e02c2c2-ba4c-44b4-a43d-f2e0ead185e5"}]},{"title":"S1A_IW_SLC__1SDV_20151223T052459_20151223T052529_009165_00D311_F8A3","link":[{"href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''8a8491fd-989c-4582-a8f6-d7a2b36bcb48'')/$value"},{"rel":"alternative","href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''8a8491fd-989c-4582-a8f6-d7a2b36bcb48'')/"},{"rel":"icon","href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''8a8491fd-989c-4582-a8f6-d7a2b36bcb48'')/Products(''Quicklook'')/$value"}],"id":"8a8491fd-989c-4582-a8f6-d7a2b36bcb48","summary":"Date:
+        MB"},{"name":"tileid","content":"32UPD"},{"name":"hv_order_tileid","content":"UD32P"},{"name":"filename","content":"S2A_MSIL1C_20151224T102432_N0201_R065_T32UPD_20151224T102435.SAFE"},{"name":"identifier","content":"S2A_MSIL1C_20151224T102432_N0201_R065_T32UPD_20151224T102435"},{"name":"uuid","content":"7e02c2c2-ba4c-44b4-a43d-f2e0ead185e5"},{"name":"level1cpdiidentifier","content":"S2A_OPER_MSI_L1C_TL_SGS__20151224T161331_A002636_T32UPD_N02.01"},{"name":"granuleidentifier","content":"S2A_OPER_MSI_L1C_TL_SGS__20151224T161331_A002636_T32UPD_N02.01"},{"name":"datastripidentifier","content":"S2A_OPER_MSI_L1C_DS_SGS__20151224T161331_S20151224T102435_N02.01"}]},{"title":"S1A_IW_SLC__1SDV_20151223T052459_20151223T052529_009165_00D311_F8A3","link":[{"href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''8a8491fd-989c-4582-a8f6-d7a2b36bcb48'')/$value"},{"rel":"alternative","href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''8a8491fd-989c-4582-a8f6-d7a2b36bcb48'')/"},{"rel":"icon","href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''8a8491fd-989c-4582-a8f6-d7a2b36bcb48'')/Products(''Quicklook'')/$value"}],"id":"8a8491fd-989c-4582-a8f6-d7a2b36bcb48","summary":"Date:
         2015-12-23T05:24:59.848Z, Instrument: SAR-C SAR, Mode: VV VH, Satellite: Sentinel-1,
         Size: 8.1 GB","date":[{"name":"ingestiondate","content":"2015-12-23T10:45:33.661Z"},{"name":"beginposition","content":"2015-12-23T05:24:59.848Z"},{"name":"endposition","content":"2015-12-23T05:25:29.692Z"}],"int":[{"name":"missiondatatakeid","content":"54033"},{"name":"orbitnumber","content":"9165"},{"name":"lastorbitnumber","content":"9165"},{"name":"relativeorbitnumber","content":"168"},{"name":"lastrelativeorbitnumber","content":"168"},{"name":"slicenumber","content":"1"}],"str":[{"name":"acquisitiontype","content":"NOMINAL"},{"name":"filename","content":"S1A_IW_SLC__1SDV_20151223T052459_20151223T052529_009165_00D311_F8A3.SAFE"},{"name":"gmlfootprint","content":"<gml:Polygon
         srsName=\"http://www.opengis.net/gml/srs/epsg.xml#4326\" xmlns:gml=\"http://www.opengis.net/gml\">\n   <gml:outerBoundaryIs>\n      <gml:LinearRing>\n         <gml:coordinates>51.071407,13.725034
@@ -164,21 +164,21 @@ interactions:
         VV"},{"name":"productclass","content":"S"},{"name":"productconsolidation","content":"SLICE"},{"name":"producttype","content":"RAW"},{"name":"platformname","content":"Sentinel-1"},{"name":"size","content":"1018.99
         MB"},{"name":"status","content":"ARCHIVED"},{"name":"uuid","content":"238b2b7f-9131-4711-9579-930c054ad387"}]}]}}'
     headers:
-      Content-Type:
-      - application/json
-      Pragma:
-      - no-cache
-      Server:
-      - Apache-Coyote/1.1
-      Vary:
-      - Accept-Encoding
       content-length:
-      - '35586'
+      - '35952'
+      content-type:
+      - application/json
+      pragma:
+      - no-cache
+      server:
+      - Apache-Coyote/1.1
+      vary:
+      - Accept-Encoding
     status:
       code: 200
       message: OK
 - request:
-    body: q=beginPosition%3A%5B2015-12-19T00%3A00%3A00Z+TO+2015-12-26T00%3A00%3A00Z%5D+footprint%3A%22contains%28POLYGON%28%2810.83+53.04%2C11.64+53.04%2C11.64+52.65%2C10.83+52.65%2C10.83+53.04%29%29%29%22
+    body: q=beginPosition%3A%5B%222015-12-19T00%3A00%3A00Z%22+TO+%222015-12-26T00%3A00%3A00Z%22%5D+footprint%3A%22contains%28POLYGON%28%2810.83+53.04%2C11.64+53.04%2C11.64+52.65%2C10.83+52.65%2C10.83+53.04%29%29%29%22
     headers:
       Accept:
       - '*/*'
@@ -187,31 +187,31 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '195'
+      - '207'
       Content-Type:
       - application/x-www-form-urlencoded; charset=UTF-8
       User-Agent:
-      - sentinelsat/0.13
+      - sentinelsat/0.14
     method: POST
     uri: https://scihub.copernicus.eu/apihub/search?format=json&rows=100&start=0
   response:
     body:
       string: '{"feed":{"xmlns:opensearch":"http://a9.com/-/spec/opensearch/1.1/","xmlns":"http://www.w3.org/2005/Atom","title":"Sentinels
-        Scientific Data Hub search results for: beginPosition:[2015-12-19T00:00:00Z
-        TO 2015-12-26T00:00:00Z] footprint:\"contains(POLYGON((10.83 53.04,11.64 53.04,11.64
-        52.65,10.83 52.65,10.83 53.04)))\"","subtitle":"Displaying 3 results. Request
-        done in 0.189 seconds.","updated":"2019-04-22T23:19:21.804Z","author":{"name":"Sentinels
-        Scientific Data Hub"},"id":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[2015-12-19T00:00:00Z
-        TO 2015-12-26T00:00:00Z] footprint:\"contains(POLYGON((10.83 53.04,11.64 53.04,11.64
-        52.65,10.83 52.65,10.83 53.04)))\"","opensearch:totalResults":"3","opensearch:startIndex":"0","opensearch:itemsPerPage":"100","opensearch:Query":{"role":"request","searchTerms":"beginPosition:[2015-12-19T00:00:00Z
-        TO 2015-12-26T00:00:00Z] footprint:\"contains(POLYGON((10.83 53.04,11.64 53.04,11.64
-        52.65,10.83 52.65,10.83 53.04)))\"","startPage":"1"},"link":[{"rel":"self","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[2015-12-19T00:00:00Z
-        TO 2015-12-26T00:00:00Z] footprint:\"contains(POLYGON((10.83 53.04,11.64 53.04,11.64
-        52.65,10.83 52.65,10.83 53.04)))\"&start=0&rows=100"},{"rel":"first","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[2015-12-19T00:00:00Z
-        TO 2015-12-26T00:00:00Z] footprint:\"contains(POLYGON((10.83 53.04,11.64 53.04,11.64
-        52.65,10.83 52.65,10.83 53.04)))\"&start=0&rows=100"},{"rel":"last","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[2015-12-19T00:00:00Z
-        TO 2015-12-26T00:00:00Z] footprint:\"contains(POLYGON((10.83 53.04,11.64 53.04,11.64
-        52.65,10.83 52.65,10.83 53.04)))\"&start=2&rows=100"},{"rel":"search","type":"application/opensearchdescription+xml","href":"opensearch_description.xml"}],"entry":[{"title":"S2A_MSIL1C_20151224T102432_N0201_R065_T32UPD_20151224T102435","link":[{"href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''7e02c2c2-ba4c-44b4-a43d-f2e0ead185e5'')/$value"},{"rel":"alternative","href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''7e02c2c2-ba4c-44b4-a43d-f2e0ead185e5'')/"},{"rel":"icon","href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''7e02c2c2-ba4c-44b4-a43d-f2e0ead185e5'')/Products(''Quicklook'')/$value"}],"id":"7e02c2c2-ba4c-44b4-a43d-f2e0ead185e5","summary":"Date:
+        Scientific Data Hub search results for: beginPosition:[\"2015-12-19T00:00:00Z\"
+        TO \"2015-12-26T00:00:00Z\"] footprint:\"contains(POLYGON((10.83 53.04,11.64
+        53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"","subtitle":"Displaying 3 results.
+        Request done in 0.022 seconds.","updated":"2020-07-24T21:43:01.923Z","author":{"name":"Sentinels
+        Scientific Data Hub"},"id":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[\"2015-12-19T00:00:00Z\"
+        TO \"2015-12-26T00:00:00Z\"] footprint:\"contains(POLYGON((10.83 53.04,11.64
+        53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"","opensearch:totalResults":"3","opensearch:startIndex":"0","opensearch:itemsPerPage":"100","opensearch:Query":{"role":"request","searchTerms":"beginPosition:[\"2015-12-19T00:00:00Z\"
+        TO \"2015-12-26T00:00:00Z\"] footprint:\"contains(POLYGON((10.83 53.04,11.64
+        53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"","startPage":"1"},"link":[{"rel":"self","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[\"2015-12-19T00:00:00Z\"
+        TO \"2015-12-26T00:00:00Z\"] footprint:\"contains(POLYGON((10.83 53.04,11.64
+        53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"&start=0&rows=100"},{"rel":"first","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[\"2015-12-19T00:00:00Z\"
+        TO \"2015-12-26T00:00:00Z\"] footprint:\"contains(POLYGON((10.83 53.04,11.64
+        53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"&start=0&rows=100"},{"rel":"last","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[\"2015-12-19T00:00:00Z\"
+        TO \"2015-12-26T00:00:00Z\"] footprint:\"contains(POLYGON((10.83 53.04,11.64
+        53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"&start=2&rows=100"},{"rel":"search","type":"application/opensearchdescription+xml","href":"opensearch_description.xml"}],"entry":[{"title":"S2A_MSIL1C_20151224T102432_N0201_R065_T32UPD_20151224T102435","link":[{"href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''7e02c2c2-ba4c-44b4-a43d-f2e0ead185e5'')/$value"},{"rel":"alternative","href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''7e02c2c2-ba4c-44b4-a43d-f2e0ead185e5'')/"},{"rel":"icon","href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''7e02c2c2-ba4c-44b4-a43d-f2e0ead185e5'')/Products(''Quicklook'')/$value"}],"id":"7e02c2c2-ba4c-44b4-a43d-f2e0ead185e5","summary":"Date:
         2015-12-24T10:24:32.035Z, Instrument: MSI, Mode: , Satellite: Sentinel-2,
         Size: 783.69 MB","date":[{"name":"datatakesensingstart","content":"2015-12-24T10:24:32.035Z"},{"name":"beginposition","content":"2015-12-24T10:24:32.035Z"},{"name":"endposition","content":"2015-12-24T10:24:32.035Z"},{"name":"ingestiondate","content":"2019-01-10T00:42:48.771Z"}],"int":[{"name":"orbitnumber","content":"2636"},{"name":"relativeorbitnumber","content":"65"}],"double":{"name":"cloudcoverpercentage","content":"56.0"},"str":[{"name":"gmlfootprint","content":"<gml:Polygon
         srsName=\"http://www.opengis.net/gml/srs/epsg.xml#4326\" xmlns:gml=\"http://www.opengis.net/gml\">\n   <gml:outerBoundaryIs>\n      <gml:LinearRing>\n         <gml:coordinates>53.24020835,10.49846043
@@ -220,7 +220,7 @@ interactions:
         Instrument"},{"name":"footprint","content":"MULTIPOLYGON (((12.07167849 52.22256603,
         12.1417699 53.20820137, 10.49846043 53.24020835, 10.46498037 52.25345681,
         12.07167849 52.22256603)))"},{"name":"s2datatakeid","content":"GS2A_20151224T102432_002636_N02.01"},{"name":"platformidentifier","content":"2015-028A"},{"name":"orbitdirection","content":"DESCENDING"},{"name":"platformserialidentifier","content":"Sentinel-2A"},{"name":"processingbaseline","content":"02.01"},{"name":"processinglevel","content":"Level-1C"},{"name":"producttype","content":"S2MSI1C"},{"name":"platformname","content":"Sentinel-2"},{"name":"size","content":"783.69
-        MB"},{"name":"tileid","content":"32UPD"},{"name":"hv_order_tileid","content":"UD32P"},{"name":"filename","content":"S2A_MSIL1C_20151224T102432_N0201_R065_T32UPD_20151224T102435.SAFE"},{"name":"identifier","content":"S2A_MSIL1C_20151224T102432_N0201_R065_T32UPD_20151224T102435"},{"name":"uuid","content":"7e02c2c2-ba4c-44b4-a43d-f2e0ead185e5"}]},{"title":"S1A_IW_SLC__1SDV_20151223T052459_20151223T052529_009165_00D311_F8A3","link":[{"href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''8a8491fd-989c-4582-a8f6-d7a2b36bcb48'')/$value"},{"rel":"alternative","href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''8a8491fd-989c-4582-a8f6-d7a2b36bcb48'')/"},{"rel":"icon","href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''8a8491fd-989c-4582-a8f6-d7a2b36bcb48'')/Products(''Quicklook'')/$value"}],"id":"8a8491fd-989c-4582-a8f6-d7a2b36bcb48","summary":"Date:
+        MB"},{"name":"tileid","content":"32UPD"},{"name":"hv_order_tileid","content":"UD32P"},{"name":"filename","content":"S2A_MSIL1C_20151224T102432_N0201_R065_T32UPD_20151224T102435.SAFE"},{"name":"identifier","content":"S2A_MSIL1C_20151224T102432_N0201_R065_T32UPD_20151224T102435"},{"name":"uuid","content":"7e02c2c2-ba4c-44b4-a43d-f2e0ead185e5"},{"name":"level1cpdiidentifier","content":"S2A_OPER_MSI_L1C_TL_SGS__20151224T161331_A002636_T32UPD_N02.01"},{"name":"granuleidentifier","content":"S2A_OPER_MSI_L1C_TL_SGS__20151224T161331_A002636_T32UPD_N02.01"},{"name":"datastripidentifier","content":"S2A_OPER_MSI_L1C_DS_SGS__20151224T161331_S20151224T102435_N02.01"}]},{"title":"S1A_IW_SLC__1SDV_20151223T052459_20151223T052529_009165_00D311_F8A3","link":[{"href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''8a8491fd-989c-4582-a8f6-d7a2b36bcb48'')/$value"},{"rel":"alternative","href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''8a8491fd-989c-4582-a8f6-d7a2b36bcb48'')/"},{"rel":"icon","href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''8a8491fd-989c-4582-a8f6-d7a2b36bcb48'')/Products(''Quicklook'')/$value"}],"id":"8a8491fd-989c-4582-a8f6-d7a2b36bcb48","summary":"Date:
         2015-12-23T05:24:59.848Z, Instrument: SAR-C SAR, Mode: VV VH, Satellite: Sentinel-1,
         Size: 8.1 GB","date":[{"name":"ingestiondate","content":"2015-12-23T10:45:33.661Z"},{"name":"beginposition","content":"2015-12-23T05:24:59.848Z"},{"name":"endposition","content":"2015-12-23T05:25:29.692Z"}],"int":[{"name":"missiondatatakeid","content":"54033"},{"name":"orbitnumber","content":"9165"},{"name":"lastorbitnumber","content":"9165"},{"name":"relativeorbitnumber","content":"168"},{"name":"lastrelativeorbitnumber","content":"168"},{"name":"slicenumber","content":"1"}],"str":[{"name":"acquisitiontype","content":"NOMINAL"},{"name":"filename","content":"S1A_IW_SLC__1SDV_20151223T052459_20151223T052529_009165_00D311_F8A3.SAFE"},{"name":"gmlfootprint","content":"<gml:Polygon
         srsName=\"http://www.opengis.net/gml/srs/epsg.xml#4326\" xmlns:gml=\"http://www.opengis.net/gml\">\n   <gml:outerBoundaryIs>\n      <gml:LinearRing>\n         <gml:coordinates>51.071407,13.725034
@@ -242,21 +242,21 @@ interactions:
         VH"},{"name":"productclass","content":"S"},{"name":"producttype","content":"GRD"},{"name":"platformname","content":"Sentinel-1"},{"name":"size","content":"1.87
         GB"},{"name":"status","content":"ARCHIVED"},{"name":"uuid","content":"83754a0e-b390-4c77-9866-0a16d4515374"}]}]}}'
     headers:
-      Content-Type:
-      - application/json
-      Pragma:
-      - no-cache
-      Server:
-      - Apache-Coyote/1.1
-      Vary:
-      - Accept-Encoding
       content-length:
-      - '9769'
+      - '10136'
+      content-type:
+      - application/json
+      pragma:
+      - no-cache
+      server:
+      - Apache-Coyote/1.1
+      vary:
+      - Accept-Encoding
     status:
       code: 200
       message: OK
 - request:
-    body: q=beginPosition%3A%5B2015-12-19T00%3A00%3A00Z+TO+2015-12-26T00%3A00%3A00Z%5D+footprint%3A%22IsWithin%28POLYGON%28%2810.83+53.04%2C11.64+53.04%2C11.64+52.65%2C10.83+52.65%2C10.83+53.04%29%29%29%22
+    body: q=beginPosition%3A%5B%222015-12-19T00%3A00%3A00Z%22+TO+%222015-12-26T00%3A00%3A00Z%22%5D+footprint%3A%22IsWithin%28POLYGON%28%2810.83+53.04%2C11.64+53.04%2C11.64+52.65%2C10.83+52.65%2C10.83+53.04%29%29%29%22
     headers:
       Accept:
       - '*/*'
@@ -265,42 +265,42 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '195'
+      - '207'
       Content-Type:
       - application/x-www-form-urlencoded; charset=UTF-8
       User-Agent:
-      - sentinelsat/0.13
+      - sentinelsat/0.14
     method: POST
     uri: https://scihub.copernicus.eu/apihub/search?format=json&rows=100&start=0
   response:
     body:
       string: '{"feed":{"xmlns:opensearch":"http://a9.com/-/spec/opensearch/1.1/","xmlns":"http://www.w3.org/2005/Atom","title":"Sentinels
-        Scientific Data Hub search results for: beginPosition:[2015-12-19T00:00:00Z
-        TO 2015-12-26T00:00:00Z] footprint:\"IsWithin(POLYGON((10.83 53.04,11.64 53.04,11.64
-        52.65,10.83 52.65,10.83 53.04)))\"","subtitle":"Displaying 0 results. Request
-        done in 15.968 seconds.","updated":"2019-04-22T23:19:37.944Z","author":{"name":"Sentinels
-        Scientific Data Hub"},"id":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[2015-12-19T00:00:00Z
-        TO 2015-12-26T00:00:00Z] footprint:\"IsWithin(POLYGON((10.83 53.04,11.64 53.04,11.64
-        52.65,10.83 52.65,10.83 53.04)))\"","opensearch:totalResults":"0","opensearch:startIndex":"0","opensearch:itemsPerPage":"100","opensearch:Query":{"role":"request","searchTerms":"beginPosition:[2015-12-19T00:00:00Z
-        TO 2015-12-26T00:00:00Z] footprint:\"IsWithin(POLYGON((10.83 53.04,11.64 53.04,11.64
-        52.65,10.83 52.65,10.83 53.04)))\"","startPage":"1"},"link":[{"rel":"self","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[2015-12-19T00:00:00Z
-        TO 2015-12-26T00:00:00Z] footprint:\"IsWithin(POLYGON((10.83 53.04,11.64 53.04,11.64
-        52.65,10.83 52.65,10.83 53.04)))\"&start=0&rows=100"},{"rel":"first","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[2015-12-19T00:00:00Z
-        TO 2015-12-26T00:00:00Z] footprint:\"IsWithin(POLYGON((10.83 53.04,11.64 53.04,11.64
-        52.65,10.83 52.65,10.83 53.04)))\"&start=0&rows=100"},{"rel":"last","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[2015-12-19T00:00:00Z
-        TO 2015-12-26T00:00:00Z] footprint:\"IsWithin(POLYGON((10.83 53.04,11.64 53.04,11.64
-        52.65,10.83 52.65,10.83 53.04)))\"&start=-1&rows=100"},{"rel":"search","type":"application/opensearchdescription+xml","href":"opensearch_description.xml"}]}}'
+        Scientific Data Hub search results for: beginPosition:[\"2015-12-19T00:00:00Z\"
+        TO \"2015-12-26T00:00:00Z\"] footprint:\"IsWithin(POLYGON((10.83 53.04,11.64
+        53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"","subtitle":"Displaying 0 results.
+        Request done in 7.83 seconds.","updated":"2020-07-24T21:43:09.869Z","author":{"name":"Sentinels
+        Scientific Data Hub"},"id":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[\"2015-12-19T00:00:00Z\"
+        TO \"2015-12-26T00:00:00Z\"] footprint:\"IsWithin(POLYGON((10.83 53.04,11.64
+        53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"","opensearch:totalResults":"0","opensearch:startIndex":"0","opensearch:itemsPerPage":"100","opensearch:Query":{"role":"request","searchTerms":"beginPosition:[\"2015-12-19T00:00:00Z\"
+        TO \"2015-12-26T00:00:00Z\"] footprint:\"IsWithin(POLYGON((10.83 53.04,11.64
+        53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"","startPage":"1"},"link":[{"rel":"self","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[\"2015-12-19T00:00:00Z\"
+        TO \"2015-12-26T00:00:00Z\"] footprint:\"IsWithin(POLYGON((10.83 53.04,11.64
+        53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"&start=0&rows=100"},{"rel":"first","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[\"2015-12-19T00:00:00Z\"
+        TO \"2015-12-26T00:00:00Z\"] footprint:\"IsWithin(POLYGON((10.83 53.04,11.64
+        53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"&start=0&rows=100"},{"rel":"last","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[\"2015-12-19T00:00:00Z\"
+        TO \"2015-12-26T00:00:00Z\"] footprint:\"IsWithin(POLYGON((10.83 53.04,11.64
+        53.04,11.64 52.65,10.83 52.65,10.83 53.04)))\"&start=-1&rows=100"},{"rel":"search","type":"application/opensearchdescription+xml","href":"opensearch_description.xml"}]}}'
     headers:
-      Content-Type:
-      - application/json
-      Pragma:
-      - no-cache
-      Server:
-      - Apache-Coyote/1.1
-      Vary:
-      - Accept-Encoding
       content-length:
-      - '1927'
+      - '1973'
+      content-type:
+      - application/json
+      pragma:
+      - no-cache
+      server:
+      - Apache-Coyote/1.1
+      vary:
+      - Accept-Encoding
     status:
       code: 200
       message: OK

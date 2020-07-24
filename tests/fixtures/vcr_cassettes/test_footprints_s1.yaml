@@ -1,6 +1,6 @@
 interactions:
 - request:
-    body: q=beginPosition%3A%5B2014-10-10T00%3A00%3A00Z+TO+2014-12-31T00%3A00%3A00Z%5D+producttype%3AGRD+footprint%3A%22Intersects%28POLYGON%28%28-66.2695+-8.0592%2C-66.2695+0.7031%2C-57.3047+0.7031%2C-57.3047+-8.0592%2C-66.2695+-8.0592%29%29%29%22
+    body: q=beginPosition%3A%5B%222014-10-10T00%3A00%3A00Z%22+TO+%222014-12-31T00%3A00%3A00Z%22%5D+producttype%3A%22GRD%22+footprint%3A%22Intersects%28POLYGON%28%28-66.2695+-8.0592%2C-66.2695+0.7031%2C-57.3047+0.7031%2C-57.3047+-8.0592%2C-66.2695+-8.0592%29%29%29%22
     headers:
       Accept:
       - '*/*'
@@ -9,30 +9,30 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '238'
+      - '256'
       Content-Type:
       - application/x-www-form-urlencoded; charset=UTF-8
       User-Agent:
-      - sentinelsat/0.13
+      - sentinelsat/0.14
     method: POST
     uri: https://scihub.copernicus.eu/apihub/search?format=json&rows=100&start=0
   response:
     body:
       string: '{"feed":{"xmlns:opensearch":"http://a9.com/-/spec/opensearch/1.1/","xmlns":"http://www.w3.org/2005/Atom","title":"Sentinels
-        Scientific Data Hub search results for: beginPosition:[2014-10-10T00:00:00Z
-        TO 2014-12-31T00:00:00Z] producttype:GRD footprint:\"Intersects(POLYGON((-66.2695
+        Scientific Data Hub search results for: beginPosition:[\"2014-10-10T00:00:00Z\"
+        TO \"2014-12-31T00:00:00Z\"] producttype:\"GRD\" footprint:\"Intersects(POLYGON((-66.2695
         -8.0592,-66.2695 0.7031,-57.3047 0.7031,-57.3047 -8.0592,-66.2695 -8.0592)))\"","subtitle":"Displaying
-        19 results. Request done in 3.798 seconds.","updated":"2019-04-22T23:18:38.768Z","author":{"name":"Sentinels
-        Scientific Data Hub"},"id":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[2014-10-10T00:00:00Z
-        TO 2014-12-31T00:00:00Z] producttype:GRD footprint:\"Intersects(POLYGON((-66.2695
-        -8.0592,-66.2695 0.7031,-57.3047 0.7031,-57.3047 -8.0592,-66.2695 -8.0592)))\"","opensearch:totalResults":"19","opensearch:startIndex":"0","opensearch:itemsPerPage":"100","opensearch:Query":{"role":"request","searchTerms":"beginPosition:[2014-10-10T00:00:00Z
-        TO 2014-12-31T00:00:00Z] producttype:GRD footprint:\"Intersects(POLYGON((-66.2695
-        -8.0592,-66.2695 0.7031,-57.3047 0.7031,-57.3047 -8.0592,-66.2695 -8.0592)))\"","startPage":"1"},"link":[{"rel":"self","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[2014-10-10T00:00:00Z
-        TO 2014-12-31T00:00:00Z] producttype:GRD footprint:\"Intersects(POLYGON((-66.2695
-        -8.0592,-66.2695 0.7031,-57.3047 0.7031,-57.3047 -8.0592,-66.2695 -8.0592)))\"&start=0&rows=100"},{"rel":"first","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[2014-10-10T00:00:00Z
-        TO 2014-12-31T00:00:00Z] producttype:GRD footprint:\"Intersects(POLYGON((-66.2695
-        -8.0592,-66.2695 0.7031,-57.3047 0.7031,-57.3047 -8.0592,-66.2695 -8.0592)))\"&start=0&rows=100"},{"rel":"last","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[2014-10-10T00:00:00Z
-        TO 2014-12-31T00:00:00Z] producttype:GRD footprint:\"Intersects(POLYGON((-66.2695
+        19 results. Request done in 1.086 seconds.","updated":"2020-07-24T21:41:53.649Z","author":{"name":"Sentinels
+        Scientific Data Hub"},"id":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[\"2014-10-10T00:00:00Z\"
+        TO \"2014-12-31T00:00:00Z\"] producttype:\"GRD\" footprint:\"Intersects(POLYGON((-66.2695
+        -8.0592,-66.2695 0.7031,-57.3047 0.7031,-57.3047 -8.0592,-66.2695 -8.0592)))\"","opensearch:totalResults":"19","opensearch:startIndex":"0","opensearch:itemsPerPage":"100","opensearch:Query":{"role":"request","searchTerms":"beginPosition:[\"2014-10-10T00:00:00Z\"
+        TO \"2014-12-31T00:00:00Z\"] producttype:\"GRD\" footprint:\"Intersects(POLYGON((-66.2695
+        -8.0592,-66.2695 0.7031,-57.3047 0.7031,-57.3047 -8.0592,-66.2695 -8.0592)))\"","startPage":"1"},"link":[{"rel":"self","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[\"2014-10-10T00:00:00Z\"
+        TO \"2014-12-31T00:00:00Z\"] producttype:\"GRD\" footprint:\"Intersects(POLYGON((-66.2695
+        -8.0592,-66.2695 0.7031,-57.3047 0.7031,-57.3047 -8.0592,-66.2695 -8.0592)))\"&start=0&rows=100"},{"rel":"first","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[\"2014-10-10T00:00:00Z\"
+        TO \"2014-12-31T00:00:00Z\"] producttype:\"GRD\" footprint:\"Intersects(POLYGON((-66.2695
+        -8.0592,-66.2695 0.7031,-57.3047 0.7031,-57.3047 -8.0592,-66.2695 -8.0592)))\"&start=0&rows=100"},{"rel":"last","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginPosition:[\"2014-10-10T00:00:00Z\"
+        TO \"2014-12-31T00:00:00Z\"] producttype:\"GRD\" footprint:\"Intersects(POLYGON((-66.2695
         -8.0592,-66.2695 0.7031,-57.3047 0.7031,-57.3047 -8.0592,-66.2695 -8.0592)))\"&start=18&rows=100"},{"rel":"search","type":"application/opensearchdescription+xml","href":"opensearch_description.xml"}],"entry":[{"title":"S1A_S2_GRDH_1SDH_20141220T100437_20141220T100501_003801_0048A7_0135","link":[{"href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''97a87887-5053-4d48-9391-aa33e7f84e5e'')/$value"},{"rel":"alternative","href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''97a87887-5053-4d48-9391-aa33e7f84e5e'')/"},{"rel":"icon","href":"https://scihub.copernicus.eu/apihub/odata/v1/Products(''97a87887-5053-4d48-9391-aa33e7f84e5e'')/Products(''Quicklook'')/$value"}],"id":"97a87887-5053-4d48-9391-aa33e7f84e5e","summary":"Date:
         2014-12-20T10:04:37.543Z, Instrument: SAR-C SAR, Mode: HH HV, Satellite: Sentinel-1,
         Size: 506 MB","date":[{"name":"beginposition","content":"2014-12-20T10:04:37.543Z"},{"name":"endposition","content":"2014-12-20T10:05:01.573Z"},{"name":"ingestiondate","content":"2015-02-27T14:32:51.784Z"}],"int":[{"name":"missiondatatakeid","content":"18599"},{"name":"slicenumber","content":"0"},{"name":"orbitnumber","content":"3801"},{"name":"lastorbitnumber","content":"3801"},{"name":"relativeorbitnumber","content":"54"},{"name":"lastrelativeorbitnumber","content":"54"}],"str":[{"name":"sensoroperationalmode","content":"SM"},{"name":"swathidentifier","content":"S2"},{"name":"orbitdirection","content":"DESCENDING"},{"name":"producttype","content":"GRD"},{"name":"platformname","content":"Sentinel-1"},{"name":"platformidentifier","content":"0000-000A"},{"name":"instrumentname","content":"Synthetic
@@ -206,16 +206,16 @@ interactions:
         ((-65.953842 -6.405005,-65.234734 -6.247155,-64.920433 -7.699877,-65.641556
         -7.858769,-65.953842 -6.405005))"},{"name":"identifier","content":"S1A_S2_GRDH_1SDH_20141206T223726_20141206T223750_003604_00442F_CF75"},{"name":"uuid","content":"eb684a80-be6a-483f-8270-b4abec35af02"}]}]}}'
     headers:
-      Content-Type:
-      - application/json
-      Pragma:
-      - no-cache
-      Server:
-      - Apache-Coyote/1.1
-      Vary:
-      - Accept-Encoding
       content-length:
-      - '51328'
+      - '51400'
+      content-type:
+      - application/json
+      pragma:
+      - no-cache
+      server:
+      - Apache-Coyote/1.1
+      vary:
+      - Accept-Encoding
     status:
       code: 200
       message: OK

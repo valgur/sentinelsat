@@ -1,6 +1,6 @@
 interactions:
 - request:
-    body: q=timeliness%3ANon%5C+Time%5C+Critical
+    body: q=ingestiondate%3A%5B%22NOW-1DAY%22+TO+%22NOW%22%5D
     headers:
       Accept:
       - '*/*'
@@ -9,41 +9,84 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '38'
+      - '51'
       Content-Type:
       - application/x-www-form-urlencoded; charset=UTF-8
       User-Agent:
-      - sentinelsat/0.13
+      - sentinelsat/0.14
     method: POST
     uri: https://scihub.copernicus.eu/apihub/search?format=json&rows=0&start=0
   response:
     body:
       string: '{"feed":{"xmlns:opensearch":"http://a9.com/-/spec/opensearch/1.1/","xmlns":"http://www.w3.org/2005/Atom","title":"Sentinels
-        Scientific Data Hub search results for: timeliness:Non\\ Time\\ Critical","subtitle":"Displaying
-        0 to -1 of 1436271 total results. Request done in 3.264 seconds.","updated":"2019-04-22T23:17:11.373Z","author":{"name":"Sentinels
-        Scientific Data Hub"},"id":"https://scihub.copernicus.eu/apihub/search?q=timeliness:Non\\
-        Time\\ Critical","opensearch:totalResults":"1436271","opensearch:startIndex":"0","opensearch:itemsPerPage":"0","opensearch:Query":{"role":"request","searchTerms":"timeliness:Non\\
-        Time\\ Critical","startPage":"1"},"link":[{"rel":"self","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=timeliness:Non\\
-        Time\\ Critical&start=0&rows=0"},{"rel":"first","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=timeliness:Non\\
-        Time\\ Critical&start=0&rows=0"},{"rel":"next","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=timeliness:Non\\
-        Time\\ Critical&start=NaN&rows=0"},{"rel":"last","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=timeliness:Non\\
-        Time\\ Critical&start=1436270&rows=0"},{"rel":"search","type":"application/opensearchdescription+xml","href":"opensearch_description.xml"}]}}'
+        Scientific Data Hub search results for: ingestiondate:[\"NOW-1DAY\" TO \"NOW\"]","subtitle":"Displaying
+        0 to -1 of 35776 total results. Request done in 0.006 seconds.","updated":"2020-07-24T21:55:00.437Z","author":{"name":"Sentinels
+        Scientific Data Hub"},"id":"https://scihub.copernicus.eu/apihub/search?q=ingestiondate:[\"NOW-1DAY\"
+        TO \"NOW\"]","opensearch:totalResults":"35776","opensearch:startIndex":"0","opensearch:itemsPerPage":"0","opensearch:Query":{"role":"request","searchTerms":"ingestiondate:[\"NOW-1DAY\"
+        TO \"NOW\"]","startPage":"1"},"link":[{"rel":"self","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=ingestiondate:[\"NOW-1DAY\"
+        TO \"NOW\"]&start=0&rows=0"},{"rel":"first","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=ingestiondate:[\"NOW-1DAY\"
+        TO \"NOW\"]&start=0&rows=0"},{"rel":"next","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=ingestiondate:[\"NOW-1DAY\"
+        TO \"NOW\"]&start=NaN&rows=0"},{"rel":"last","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=ingestiondate:[\"NOW-1DAY\"
+        TO \"NOW\"]&start=35775&rows=0"},{"rel":"search","type":"application/opensearchdescription+xml","href":"opensearch_description.xml"}]}}'
     headers:
-      Content-Type:
+      content-length:
+      - '1406'
+      content-type:
       - application/json
-      Pragma:
+      pragma:
       - no-cache
-      Server:
+      server:
       - Apache-Coyote/1.1
-      Vary:
+      vary:
       - Accept-Encoding
+    status:
+      code: 200
+      message: OK
+- request:
+    body: q=ingestiondate%3A%5B%22NOW-1DAY%22+TO+%2A%5D
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '45'
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=UTF-8
+      User-Agent:
+      - sentinelsat/0.14
+    method: POST
+    uri: https://scihub.copernicus.eu/apihub/search?format=json&rows=0&start=0
+  response:
+    body:
+      string: '{"feed":{"xmlns:opensearch":"http://a9.com/-/spec/opensearch/1.1/","xmlns":"http://www.w3.org/2005/Atom","title":"Sentinels
+        Scientific Data Hub search results for: ingestiondate:[\"NOW-1DAY\" TO *]","subtitle":"Displaying
+        0 to -1 of 35776 total results. Request done in 0.01 seconds.","updated":"2020-07-24T21:55:00.712Z","author":{"name":"Sentinels
+        Scientific Data Hub"},"id":"https://scihub.copernicus.eu/apihub/search?q=ingestiondate:[\"NOW-1DAY\"
+        TO *]","opensearch:totalResults":"35776","opensearch:startIndex":"0","opensearch:itemsPerPage":"0","opensearch:Query":{"role":"request","searchTerms":"ingestiondate:[\"NOW-1DAY\"
+        TO *]","startPage":"1"},"link":[{"rel":"self","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=ingestiondate:[\"NOW-1DAY\"
+        TO *]&start=0&rows=0"},{"rel":"first","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=ingestiondate:[\"NOW-1DAY\"
+        TO *]&start=0&rows=0"},{"rel":"next","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=ingestiondate:[\"NOW-1DAY\"
+        TO *]&start=NaN&rows=0"},{"rel":"last","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=ingestiondate:[\"NOW-1DAY\"
+        TO *]&start=35775&rows=0"},{"rel":"search","type":"application/opensearchdescription+xml","href":"opensearch_description.xml"}]}}'
+    headers:
       content-length:
       - '1363'
+      content-type:
+      - application/json
+      pragma:
+      - no-cache
+      server:
+      - Apache-Coyote/1.1
+      vary:
+      - Accept-Encoding
     status:
       code: 200
       message: OK
 - request:
-    body: q=timeliness%3A.%2B%5C+Critical
+    body: q=relativeorbitnumber%3A%7B101+TO+103%7D
     headers:
       Accept:
       - '*/*'
@@ -52,41 +95,41 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '31'
+      - '40'
       Content-Type:
       - application/x-www-form-urlencoded; charset=UTF-8
       User-Agent:
-      - sentinelsat/0.13
+      - sentinelsat/0.14
     method: POST
     uri: https://scihub.copernicus.eu/apihub/search?format=json&rows=0&start=0
   response:
     body:
       string: '{"feed":{"xmlns:opensearch":"http://a9.com/-/spec/opensearch/1.1/","xmlns":"http://www.w3.org/2005/Atom","title":"Sentinels
-        Scientific Data Hub search results for: timeliness:.+\\ Critical","subtitle":"Displaying
-        0 to -1 of 1443203 total results. Request done in 0.368 seconds.","updated":"2019-04-22T23:17:12.366Z","author":{"name":"Sentinels
-        Scientific Data Hub"},"id":"https://scihub.copernicus.eu/apihub/search?q=timeliness:.+\\
-        Critical","opensearch:totalResults":"1443203","opensearch:startIndex":"0","opensearch:itemsPerPage":"0","opensearch:Query":{"role":"request","searchTerms":"timeliness:.+\\
-        Critical","startPage":"1"},"link":[{"rel":"self","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=timeliness:.+\\
-        Critical&start=0&rows=0"},{"rel":"first","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=timeliness:.+\\
-        Critical&start=0&rows=0"},{"rel":"next","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=timeliness:.+\\
-        Critical&start=NaN&rows=0"},{"rel":"last","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=timeliness:.+\\
-        Critical&start=1443202&rows=0"},{"rel":"search","type":"application/opensearchdescription+xml","href":"opensearch_description.xml"}]}}'
+        Scientific Data Hub search results for: relativeorbitnumber:{101 TO 103}","subtitle":"Displaying
+        0 to -1 of 159793 total results. Request done in 0.021 seconds.","updated":"2020-07-24T21:55:01.307Z","author":{"name":"Sentinels
+        Scientific Data Hub"},"id":"https://scihub.copernicus.eu/apihub/search?q=relativeorbitnumber:{101
+        TO 103}","opensearch:totalResults":"159793","opensearch:startIndex":"0","opensearch:itemsPerPage":"0","opensearch:Query":{"role":"request","searchTerms":"relativeorbitnumber:{101
+        TO 103}","startPage":"1"},"link":[{"rel":"self","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=relativeorbitnumber:{101
+        TO 103}&start=0&rows=0"},{"rel":"first","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=relativeorbitnumber:{101
+        TO 103}&start=0&rows=0"},{"rel":"next","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=relativeorbitnumber:{101
+        TO 103}&start=NaN&rows=0"},{"rel":"last","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=relativeorbitnumber:{101
+        TO 103}&start=159792&rows=0"},{"rel":"search","type":"application/opensearchdescription+xml","href":"opensearch_description.xml"}]}}'
     headers:
-      Content-Type:
-      - application/json
-      Pragma:
-      - no-cache
-      Server:
-      - Apache-Coyote/1.1
-      Vary:
-      - Accept-Encoding
       content-length:
-      - '1307'
+      - '1360'
+      content-type:
+      - application/json
+      pragma:
+      - no-cache
+      server:
+      - Apache-Coyote/1.1
+      vary:
+      - Accept-Encoding
     status:
       code: 200
       message: OK
 - request:
-    body: q=identifier%3A%2FS%5B123+%5DA.%2A%2F
+    body: q=timeliness%3A%22Near+Real+Time%22
     headers:
       Accept:
       - '*/*'
@@ -95,36 +138,211 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '37'
+      - '35'
       Content-Type:
       - application/x-www-form-urlencoded; charset=UTF-8
       User-Agent:
-      - sentinelsat/0.13
+      - sentinelsat/0.14
     method: POST
     uri: https://scihub.copernicus.eu/apihub/search?format=json&rows=0&start=0
   response:
     body:
       string: '{"feed":{"xmlns:opensearch":"http://a9.com/-/spec/opensearch/1.1/","xmlns":"http://www.w3.org/2005/Atom","title":"Sentinels
-        Scientific Data Hub search results for: identifier:/S[123 ]A.*/","subtitle":"Displaying
-        0 to -1 of 9750200 total results. Request done in 14.409 seconds.","updated":"2019-04-22T23:17:27.031Z","author":{"name":"Sentinels
-        Scientific Data Hub"},"id":"https://scihub.copernicus.eu/apihub/search?q=identifier:/S[123
-        ]A.*/","opensearch:totalResults":"9750200","opensearch:startIndex":"0","opensearch:itemsPerPage":"0","opensearch:Query":{"role":"request","searchTerms":"identifier:/S[123
-        ]A.*/","startPage":"1"},"link":[{"rel":"self","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=identifier:/S[123
-        ]A.*/&start=0&rows=0"},{"rel":"first","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=identifier:/S[123
-        ]A.*/&start=0&rows=0"},{"rel":"next","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=identifier:/S[123
-        ]A.*/&start=NaN&rows=0"},{"rel":"last","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=identifier:/S[123
-        ]A.*/&start=9750199&rows=0"},{"rel":"search","type":"application/opensearchdescription+xml","href":"opensearch_description.xml"}]}}'
+        Scientific Data Hub search results for: timeliness:\"Near Real Time\"","subtitle":"Displaying
+        0 to -1 of 104111 total results. Request done in 0.091 seconds.","updated":"2020-07-24T21:55:01.528Z","author":{"name":"Sentinels
+        Scientific Data Hub"},"id":"https://scihub.copernicus.eu/apihub/search?q=timeliness:\"Near
+        Real Time\"","opensearch:totalResults":"104111","opensearch:startIndex":"0","opensearch:itemsPerPage":"0","opensearch:Query":{"role":"request","searchTerms":"timeliness:\"Near
+        Real Time\"","startPage":"1"},"link":[{"rel":"self","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=timeliness:\"Near
+        Real Time\"&start=0&rows=0"},{"rel":"first","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=timeliness:\"Near
+        Real Time\"&start=0&rows=0"},{"rel":"next","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=timeliness:\"Near
+        Real Time\"&start=NaN&rows=0"},{"rel":"last","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=timeliness:\"Near
+        Real Time\"&start=104110&rows=0"},{"rel":"search","type":"application/opensearchdescription+xml","href":"opensearch_description.xml"}]}}'
     headers:
-      Content-Type:
-      - application/json
-      Pragma:
-      - no-cache
-      Server:
-      - Apache-Coyote/1.1
-      Vary:
-      - Accept-Encoding
       content-length:
-      - '1301'
+      - '1339'
+      content-type:
+      - application/json
+      pragma:
+      - no-cache
+      server:
+      - Apache-Coyote/1.1
+      vary:
+      - Accept-Encoding
+    status:
+      code: 200
+      message: OK
+- request:
+    body: q=timeliness%3A%22.%2B+Critical%22
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '34'
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=UTF-8
+      User-Agent:
+      - sentinelsat/0.14
+    method: POST
+    uri: https://scihub.copernicus.eu/apihub/search?format=json&rows=0&start=0
+  response:
+    body:
+      string: '{"feed":{"xmlns:opensearch":"http://a9.com/-/spec/opensearch/1.1/","xmlns":"http://www.w3.org/2005/Atom","title":"Sentinels
+        Scientific Data Hub search results for: timeliness:\".+ Critical\"","subtitle":"Displaying
+        0 to -1 of 2839193 total results. Request done in 0.164 seconds.","updated":"2020-07-24T21:55:02.030Z","author":{"name":"Sentinels
+        Scientific Data Hub"},"id":"https://scihub.copernicus.eu/apihub/search?q=timeliness:\".+
+        Critical\"","opensearch:totalResults":"2839193","opensearch:startIndex":"0","opensearch:itemsPerPage":"0","opensearch:Query":{"role":"request","searchTerms":"timeliness:\".+
+        Critical\"","startPage":"1"},"link":[{"rel":"self","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=timeliness:\".+
+        Critical\"&start=0&rows=0"},{"rel":"first","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=timeliness:\".+
+        Critical\"&start=0&rows=0"},{"rel":"next","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=timeliness:\".+
+        Critical\"&start=NaN&rows=0"},{"rel":"last","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=timeliness:\".+
+        Critical\"&start=2839192&rows=0"},{"rel":"search","type":"application/opensearchdescription+xml","href":"opensearch_description.xml"}]}}'
+    headers:
+      content-length:
+      - '1321'
+      content-type:
+      - application/json
+      pragma:
+      - no-cache
+      server:
+      - Apache-Coyote/1.1
+      vary:
+      - Accept-Encoding
+    status:
+      code: 200
+      message: OK
+- request:
+    body: q=beginposition%3A%5B%22NOW%2FMONTH%22+TO+%2A%5D+identifier%3A%2FS%5B12+%5DA.%2A%2F
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '83'
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=UTF-8
+      User-Agent:
+      - sentinelsat/0.14
+    method: POST
+    uri: https://scihub.copernicus.eu/apihub/search?format=json&rows=0&start=0
+  response:
+    body:
+      string: '{"feed":{"xmlns:opensearch":"http://a9.com/-/spec/opensearch/1.1/","xmlns":"http://www.w3.org/2005/Atom","title":"Sentinels
+        Scientific Data Hub search results for: beginposition:[\"NOW/MONTH\" TO *]
+        identifier:/S[12 ]A.*/","subtitle":"Displaying 0 to -1 of 328302 total results.
+        Request done in 0.427 seconds.","updated":"2020-07-24T21:55:02.705Z","author":{"name":"Sentinels
+        Scientific Data Hub"},"id":"https://scihub.copernicus.eu/apihub/search?q=beginposition:[\"NOW/MONTH\"
+        TO *] identifier:/S[12 ]A.*/","opensearch:totalResults":"328302","opensearch:startIndex":"0","opensearch:itemsPerPage":"0","opensearch:Query":{"role":"request","searchTerms":"beginposition:[\"NOW/MONTH\"
+        TO *] identifier:/S[12 ]A.*/","startPage":"1"},"link":[{"rel":"self","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginposition:[\"NOW/MONTH\"
+        TO *] identifier:/S[12 ]A.*/&start=0&rows=0"},{"rel":"first","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginposition:[\"NOW/MONTH\"
+        TO *] identifier:/S[12 ]A.*/&start=0&rows=0"},{"rel":"next","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginposition:[\"NOW/MONTH\"
+        TO *] identifier:/S[12 ]A.*/&start=NaN&rows=0"},{"rel":"last","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginposition:[\"NOW/MONTH\"
+        TO *] identifier:/S[12 ]A.*/&start=328301&rows=0"},{"rel":"search","type":"application/opensearchdescription+xml","href":"opensearch_description.xml"}]}}'
+    headers:
+      content-length:
+      - '1535'
+      content-type:
+      - application/json
+      pragma:
+      - no-cache
+      server:
+      - Apache-Coyote/1.1
+      vary:
+      - Accept-Encoding
+    status:
+      code: 200
+      message: OK
+- request:
+    body: q=beginposition%3A%5B%22NOW%2FMONTH%22+TO+%2A%5D+identifier%3AS1A%2A
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '68'
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=UTF-8
+      User-Agent:
+      - sentinelsat/0.14
+    method: POST
+    uri: https://scihub.copernicus.eu/apihub/search?format=json&rows=0&start=0
+  response:
+    body:
+      string: '{"feed":{"xmlns:opensearch":"http://a9.com/-/spec/opensearch/1.1/","xmlns":"http://www.w3.org/2005/Atom","title":"Sentinels
+        Scientific Data Hub search results for: beginposition:[\"NOW/MONTH\" TO *]
+        identifier:S1A*","subtitle":"Displaying 0 to -1 of 46824 total results. Request
+        done in 0.071 seconds.","updated":"2020-07-24T21:55:02.950Z","author":{"name":"Sentinels
+        Scientific Data Hub"},"id":"https://scihub.copernicus.eu/apihub/search?q=beginposition:[\"NOW/MONTH\"
+        TO *] identifier:S1A*","opensearch:totalResults":"46824","opensearch:startIndex":"0","opensearch:itemsPerPage":"0","opensearch:Query":{"role":"request","searchTerms":"beginposition:[\"NOW/MONTH\"
+        TO *] identifier:S1A*","startPage":"1"},"link":[{"rel":"self","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginposition:[\"NOW/MONTH\"
+        TO *] identifier:S1A*&start=0&rows=0"},{"rel":"first","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginposition:[\"NOW/MONTH\"
+        TO *] identifier:S1A*&start=0&rows=0"},{"rel":"next","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginposition:[\"NOW/MONTH\"
+        TO *] identifier:S1A*&start=NaN&rows=0"},{"rel":"last","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginposition:[\"NOW/MONTH\"
+        TO *] identifier:S1A*&start=46823&rows=0"},{"rel":"search","type":"application/opensearchdescription+xml","href":"opensearch_description.xml"}]}}'
+    headers:
+      content-length:
+      - '1483'
+      content-type:
+      - application/json
+      pragma:
+      - no-cache
+      server:
+      - Apache-Coyote/1.1
+      vary:
+      - Accept-Encoding
+    status:
+      code: 200
+      message: OK
+- request:
+    body: q=beginposition%3A%5B%22NOW%2FMONTH%22+TO+%2A%5D+identifier%3AS2A%2A
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '68'
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=UTF-8
+      User-Agent:
+      - sentinelsat/0.14
+    method: POST
+    uri: https://scihub.copernicus.eu/apihub/search?format=json&rows=0&start=0
+  response:
+    body:
+      string: '{"feed":{"xmlns:opensearch":"http://a9.com/-/spec/opensearch/1.1/","xmlns":"http://www.w3.org/2005/Atom","title":"Sentinels
+        Scientific Data Hub search results for: beginposition:[\"NOW/MONTH\" TO *]
+        identifier:S2A*","subtitle":"Displaying 0 to -1 of 281478 total results. Request
+        done in 0.527 seconds.","updated":"2020-07-24T21:55:03.617Z","author":{"name":"Sentinels
+        Scientific Data Hub"},"id":"https://scihub.copernicus.eu/apihub/search?q=beginposition:[\"NOW/MONTH\"
+        TO *] identifier:S2A*","opensearch:totalResults":"281478","opensearch:startIndex":"0","opensearch:itemsPerPage":"0","opensearch:Query":{"role":"request","searchTerms":"beginposition:[\"NOW/MONTH\"
+        TO *] identifier:S2A*","startPage":"1"},"link":[{"rel":"self","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginposition:[\"NOW/MONTH\"
+        TO *] identifier:S2A*&start=0&rows=0"},{"rel":"first","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginposition:[\"NOW/MONTH\"
+        TO *] identifier:S2A*&start=0&rows=0"},{"rel":"next","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginposition:[\"NOW/MONTH\"
+        TO *] identifier:S2A*&start=NaN&rows=0"},{"rel":"last","type":"application/atom+xml","href":"https://scihub.copernicus.eu/apihub/search?q=beginposition:[\"NOW/MONTH\"
+        TO *] identifier:S2A*&start=281477&rows=0"},{"rel":"search","type":"application/opensearchdescription+xml","href":"opensearch_description.xml"}]}}'
+    headers:
+      content-length:
+      - '1486'
+      content-type:
+      - application/json
+      pragma:
+      - no-cache
+      server:
+      - Apache-Coyote/1.1
+      vary:
+      - Accept-Encoding
     status:
       code: 200
       message: OK
